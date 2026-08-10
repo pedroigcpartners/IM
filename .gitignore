@@ -1,0 +1,9 @@
+# Generated / derived artifacts (reproducible from sources)
+*.pdf
+refs/*-thumbs*.jpg
+refs/*_x/
+refs/**/unpacked/
+**/node_modules/
+scratchpad/
+*.tmp
+.~lock.*
