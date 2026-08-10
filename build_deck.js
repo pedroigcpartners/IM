@@ -1,639 +1,550 @@
-// Project Compass — Confidential Information Memorandum (Mobi)
-// IGC Partners house style: white content, navy #222F44 covers/dividers, Mobi orange #F35B1A accent.
+// Project Compass — CIM (Mobi). IGC house style v2, modeled on Project Bluebird/Biscoitê:
+// soft slate/powder-blue system, Poppins throughout, Mobi orange as signature accent.
 const pptxgen = require("pptxgenjs");
 const p = new pptxgen();
-p.layout = "LAYOUT_WIDE";           // 13.3 x 7.5
+p.layout = "LAYOUT_WIDE"; // 13.333 x 7.5
 p.author = "IGC Partners";
 p.title = "Project Compass — Confidential Information Memorandum";
 
 // ---------- palette ----------
-const NAVY = "222F44", NAVY2 = "2C3B54", INK = "1A2230";
-const ORANGE = "F35B1A", ORANGE_D = "C6470F", GOLD = "D3A93D";
-const WHITE = "FFFFFF", PAPER = "F5F7F9", CARD = "EEF1F5", LINE = "D9DEE5";
-const GRAY = "6B7686", GRAY_L = "97A0AD", TXT = "2A3342";
-const SERIF = "Source Serif Pro", SERIF_SB = "Source Serif Pro SemiBold", SERIF_BLK = "Source Serif Pro Black";
-const SANS = "Poppins", SANS_M = "Poppins Medium", SANS_SB = "Poppins SemiBold";
+const DEEP="33425A", SLATE="5C77A0", SLATE_D="44597A", TITLE="4E6486";
+const POWDER="BFD3E6", POWDER_L="E4ECF4", POWDER_L2="EFF4F9", CHART_LT="C6D7E8";
+const ORANGE="F35B1A", ORANGE_D="C6470F";
+const WHITE="FFFFFF", PAPER="F5F7FA", CARD="EAEFF5", LINE="DBE1E9";
+const TXT="39424E", GRAY="6A7481", GRAY_L="9AA3AE";
+const SANS="Poppins", SANS_M="Poppins Medium", SANS_SB="Poppins SemiBold", SANS_L="Poppins Light";
 
-const W = 13.333, H = 7.5, M = 0.55;
-const A = "assets/";
-const ic = (n, c) => `${A}icons/${n}_${c}.png`;
-
-const SECTIONS = ["Introduction", "Investment Thesis", "Company Overview", "Financial Highlights"];
+const W=13.333, H=7.5, M=0.6, A="assets/";
+const MOBI_AR=246/768, IGC_AR=778/900;
+const SECTIONS=["Introduction","Investment Thesis","Company Overview","Financial Highlights"];
+const ic=(n,c)=>`${A}icons/${n}_${c}.png`;
 
 // ---------- helpers ----------
-function bg(s, color){ s.background = { color }; }
-
-// content-slide chrome: igc top-right, eyebrow, title, subtitle, source, page number
-function chrome(s, {eyebrow, title, subtitle, source, page}){
-  s.addImage({ path: A+"igc_navy.png", x: W-0.55-0.62, y: 0.34, w: 0.62, h: 0.62*(778/900) });
-  if (eyebrow) s.addText(eyebrow.toUpperCase(), { x:M, y:0.42, w:8, h:0.28, fontFace:SANS_SB, fontSize:10.5, color:ORANGE, charSpacing:2, align:"left" });
-  if (title) s.addText(title, { x:M, y:0.66, w:W-M-1.4, h:0.7, fontFace:SERIF_SB, fontSize:25, color:NAVY, align:"left", valign:"top" });
-  if (subtitle) s.addText(subtitle, { x:M, y:1.34, w:W-M-1.4, h:0.5, fontFace:SANS, fontSize:12.5, color:GRAY, align:"left", valign:"top" });
-  if (source) s.addText(source, { x:M, y:H-0.34, w:W-2.2, h:0.26, fontFace:SANS, fontSize:7, color:GRAY_L, align:"left", valign:"middle" });
-  s.addText([{text:"Confidential   ", options:{color:GRAY_L}},{text:String(page), options:{color:NAVY, bold:true}}],
-            { x:W-1.6, y:H-0.34, w:1.05, h:0.26, fontFace:SANS_M, fontSize:8.5, align:"right", valign:"middle" });
+const bg=(s,c)=>{ s.background={color:c}; };
+function rect(s,x,y,w,h,c){ s.addShape(p.ShapeType.rect,{x,y,w,h,fill:{color:c},line:{type:"none"}}); }
+function rrect(s,x,y,w,h,c,{radius=0.1,line=null,shadow=false}={}){
+  const o={x,y,w,h,rectRadius:radius,fill:{color:c},line:line?{color:line,width:1}:{type:"none"}};
+  if(shadow) o.shadow={type:"outer",color:"B4BEC9",opacity:0.32,blur:8,offset:2,angle:90};
+  s.addShape(p.ShapeType.roundRect,o);
+}
+function iconChip(s,x,y,d,icon,{fill=SLATE,color="white"}={}){
+  s.addShape(p.ShapeType.ellipse,{x,y,w:d,h:d,fill:{color:fill},line:{type:"none"}});
+  const pad=d*0.27; s.addImage({path:ic(icon,color),x:x+pad,y:y+pad,w:d-2*pad,h:d-2*pad});
+}
+function photoCircle(s,path,x,y,d,{ring=WHITE,ringW=3,badge=null,badgeFill=ORANGE}={}){
+  s.addShape(p.ShapeType.ellipse,{x:x-0.04,y:y-0.04,w:d+0.08,h:d+0.08,fill:{color:ring},line:{type:"none"},shadow:{type:"outer",color:"AEB8C4",opacity:0.3,blur:7,offset:2,angle:90}});
+  s.addImage({path,x,y,w:d,h:d,rounding:true,sizing:{type:"cover",w:d,h:d}});
+  if(badge!==null){
+    const bd=d*0.34; s.addShape(p.ShapeType.ellipse,{x:x-bd*0.15,y:y-bd*0.15,w:bd,h:bd,fill:{color:badgeFill},line:{color:WHITE,width:2}});
+    s.addText(String(badge),{x:x-bd*0.15,y:y-bd*0.15,w:bd,h:bd,fontFace:SANS_SB,fontSize:15,color:WHITE,align:"center",valign:"middle",margin:0});
+  }
+}
+function chrome(s,{eyebrow,title,subtitle,num,numFill=ORANGE,source,page,titleColor=TITLE}={}){
+  s.addImage({path:A+"mobi_logo_navy.png",x:W-M-1.0,y:0.34,w:1.0,h:1.0*MOBI_AR});
+  if(eyebrow) s.addText(eyebrow,{x:M,y:0.4,w:8,h:0.28,fontFace:SANS_M,fontSize:11,color:GRAY,align:"left",margin:0});
+  let tx=M;
+  if(num!=null){ const d=0.52; s.addShape(p.ShapeType.ellipse,{x:M,y:0.74,w:d,h:d,fill:{color:numFill},line:{type:"none"}});
+    s.addText(String(num),{x:M,y:0.74,w:d,h:d,fontFace:SANS_SB,fontSize:17,color:WHITE,align:"center",valign:"middle",margin:0}); tx=M+d+0.22; }
+  if(title) s.addText(title,{x:tx,y:0.7,w:W-tx-1.4,h:0.6,fontFace:SANS_SB,fontSize:23,color:titleColor,align:"left",valign:"middle",margin:0});
+  if(subtitle) s.addText(subtitle,{x:M,y:1.34,w:W-M-1.4,h:0.5,fontFace:SANS,fontSize:12,color:GRAY,align:"left",valign:"top",margin:0,lineSpacingMultiple:1.02});
+  if(source) s.addText(source,{x:M,y:H-0.62,w:W-2.0,h:0.24,fontFace:SANS,fontSize:7,color:GRAY_L,align:"left",valign:"middle",margin:0});
+  // footer: igc + page + Confidential
+  s.addImage({path:A+"igc_navy.png",x:M,y:H-0.42,w:0.34,h:0.34*IGC_AR});
+  s.addText([{text:String(page),options:{color:TXT,fontFace:SANS_M}},{text:"    Confidential",options:{color:GRAY_L,fontFace:SANS}}],
+            {x:M+0.44,y:H-0.4,w:3,h:0.3,fontSize:9,align:"left",valign:"middle",margin:0});
+}
+function conclusionBand(s,text,{y=H-1.15,color=SLATE,h=0.85}={}){
+  rect(s,0,y,W,h,color);
+  s.addText(text,{x:1.2,y:y,w:W-2.4,h:h,fontFace:SANS_SB,fontSize:12.5,color:WHITE,align:"center",valign:"middle",margin:0,lineSpacingMultiple:1.0});
+}
+// clean column chart
+function colChart(s,type,data,x,y,w,h,opts={}){
+  s.addChart(type,data,Object.assign({
+    x,y,w,h,barDir:"col",showLegend:false,
+    showValue:true,dataLabelFontFace:SANS_SB,dataLabelFontSize:10,dataLabelColor:SLATE,dataLabelPosition:"outEnd",
+    catAxisLabelFontFace:SANS,catAxisLabelFontSize:9.5,catAxisLabelColor:GRAY,catGridLine:{style:"none"},catAxisLineShow:false,
+    valAxisHidden:true,valGridLine:{style:"none"},valAxisLineShow:false,barGapWidthPct:55,
+  },opts));
 }
 
-// icon in a soft circle chip
-function chip(s, x, y, d, icon, {fill=CARD, color="navy"}={}){
-  s.addShape(p.ShapeType.ellipse, { x, y, w:d, h:d, fill:{color:fill}, line:{type:"none"} });
-  const pad = d*0.26;
-  s.addImage({ path: ic(icon, color), x:x+pad, y:y+pad, w:d-2*pad, h:d-2*pad });
-}
-
-// rounded card
-function card(s, x, y, w, h, {fill=WHITE, line=LINE, shadow=true, radius=0.1}={}){
-  const o = { x, y, w, h, rectRadius:radius, fill:{color:fill}, line: line?{color:line,width:1}:{type:"none"} };
-  if (shadow) o.shadow = { type:"outer", color:"9AA6B4", opacity:0.28, blur:7, offset:2, angle:90 };
-  s.addShape(p.ShapeType.roundRect, o);
-}
-
-// big stat callout (number + label)
-function stat(s, x, y, w, num, label, {numColor=NAVY, numSize=27, labelColor=GRAY, align="left"}={}){
-  s.addText(num, { x, y, w, h:0.5, fontFace:SERIF_BLK, fontSize:numSize, color:numColor, align, valign:"bottom", margin:0 });
-  s.addText(label, { x, y:y+0.52, w, h:0.5, fontFace:SANS, fontSize:9.5, color:labelColor, align, valign:"top", margin:0, lineSpacingMultiple:0.95 });
-}
-
-// section divider (dark)
-function divider(s, idx){
-  bg(s, NAVY);
-  s.addShape(p.ShapeType.rect, { x:0, y:0, w:W, h:H, fill:{color:NAVY} });
-  // ghost number
-  s.addText(String(idx+1).padStart(2,"0"), { x:W-5.6, y:-0.5, w:5.4, h:H+1, fontFace:SERIF_BLK, fontSize:300, color:NAVY2, align:"right", valign:"middle", margin:0 });
-  s.addImage({ path:A+"igc_white.png", x:W-0.55-0.62, y:0.34, w:0.62, h:0.62*(778/900) });
-  s.addText("EXECUTIVE SUMMARY", { x:M, y:1.4, w:8, h:0.3, fontFace:SANS_SB, fontSize:11, color:ORANGE, charSpacing:3 });
-  // nav list
-  let y = 2.5;
-  SECTIONS.forEach((sec, i)=>{
-    const active = i===idx;
-    if (active){
-      s.addShape(p.ShapeType.roundRect, { x:M-0.14, y:y-0.12, w:6.6, h:0.72, rectRadius:0.08, fill:{color:ORANGE}, line:{type:"none"} });
-    }
-    s.addText(String(i+1).padStart(2,"0"), { x:M, y:y-0.05, w:0.7, h:0.6, fontFace:SERIF_BLK, fontSize:22, color: active?WHITE:GRAY_L, valign:"middle", margin:0 });
-    s.addText(sec, { x:M+0.75, y:y-0.05, w:5.6, h:0.6, fontFace: active?SERIF_SB:SERIF, fontSize:21, color: active?WHITE:"AEB7C4", valign:"middle", margin:0 });
-    y += 0.92;
-  });
-  // Mobi logo bottom-left
-  s.addImage({ path:A+"mobi_logo_black.png", x:M, y:H-1.05, w:1.7, h:1.7*(246/768) });
-}
-
-// ============================================================ SLIDE 1 — COVER
-(() => {
-  const s = p.addSlide(); bg(s, NAVY);
-  s.addImage({ path:A+"cover_buses.jpeg", x:0, y:0, w:W, h:H, sizing:{type:"cover", w:W, h:H} });
-  // dark gradient overlay via stacked translucent rects (left-heavy)
-  s.addShape(p.ShapeType.rect, { x:0, y:0, w:W, h:H, fill:{color:INK, transparency:38} });
-  s.addShape(p.ShapeType.rect, { x:0, y:0, w:6.6, h:H, fill:{color:INK, transparency:14} });
-  s.addShape(p.ShapeType.rect, { x:0, y:H-2.6, w:W, h:2.6, fill:{color:INK, transparency:30} });
-  s.addImage({ path:A+"igc_white.png", x:W-0.6-0.72, y:0.5, w:0.72, h:0.72*(778/900) });
-  s.addText("PROJECT", { x:M, y:2.35, w:8, h:0.4, fontFace:SANS_SB, fontSize:15, color:"E6EAF0", charSpacing:8 });
-  s.addText("Compass", { x:M-0.04, y:2.68, w:9, h:1.3, fontFace:SERIF_BLK, fontSize:66, color:WHITE, margin:0 });
-  s.addShape(p.ShapeType.rect, { x:M+0.02, y:4.06, w:0.9, h:0.05, fill:{color:ORANGE} });
-  s.addText("Confidential Information Memorandum", { x:M, y:4.2, w:9, h:0.5, fontFace:SANS, fontSize:16, color:"E6EAF0" });
-  // Mobi logo bottom-left
-  s.addImage({ path:A+"mobi_logo_black.png", x:M, y:H-1.15, w:2.1, h:2.1*(246/768) });
-  s.addText("August 2026", { x:W-3.1, y:H-0.62, w:2.55, h:0.3, fontFace:SANS_M, fontSize:11, color:"D6DCE5", align:"right" });
+// =========================================================== 1 COVER
+(()=>{ const s=p.addSlide(); bg(s,POWDER);
+  // big circular vehicle photo bleeding left
+  const d=6.4; s.addShape(p.ShapeType.ellipse,{x:-1.5,y:H/2-d/2,w:d,h:d,fill:{color:WHITE},line:{type:"none"},shadow:{type:"outer",color:"9FB2C6",opacity:0.4,blur:14,offset:3,angle:90}});
+  s.addImage({path:A+"cover_buses.jpeg",x:-1.5+0.12,y:H/2-d/2+0.12,w:d-0.24,h:d-0.24,rounding:true,sizing:{type:"cover",w:d-0.24,h:d-0.24}});
+  // secondary small circle
+  const d2=2.2; s.addShape(p.ShapeType.ellipse,{x:3.15,y:5.05,w:d2,h:d2,fill:{color:WHITE},line:{type:"none"},shadow:{type:"outer",color:"9FB2C6",opacity:0.4,blur:10,offset:2,angle:90}});
+  s.addImage({path:A+"mobi_microbus.png",x:3.15+0.1,y:5.05+0.1,w:d2-0.2,h:d2-0.2,rounding:true,sizing:{type:"cover",w:d2-0.2,h:d2-0.2}});
+  // brand block right
+  s.addImage({path:A+"mobi_logo_navy.png",x:7.4,y:1.75,w:4.0,h:4.0*MOBI_AR});
+  s.addText("Project Compass",{x:7.4,y:3.15,w:5.3,h:0.7,fontFace:SANS_SB,fontSize:30,color:SLATE_D,align:"left",margin:0});
+  rrect(s,7.42,4.02,3.9,0.62,POWDER,{radius:0.31,line:SLATE});
+  s.addText("Information Memorandum",{x:7.42,y:4.02,w:3.9,h:0.62,fontFace:SANS_M,fontSize:13,color:SLATE_D,align:"center",valign:"middle",margin:0});
+  s.addImage({path:A+"igc_navy.png",x:M,y:H-0.85,w:0.6,h:0.6*IGC_AR});
 })();
 
-// ============================================================ SLIDE 2 — DISCLAIMER
-(() => {
-  const s = p.addSlide(); bg(s, NAVY);
-  s.addImage({ path:A+"igc_white.png", x:W-0.55-0.6, y:0.34, w:0.6, h:0.6*(778/900) });
-  s.addText("Disclaimer", { x:M, y:0.5, w:8, h:0.6, fontFace:SERIF_SB, fontSize:26, color:WHITE });
-  s.addText("Project Compass", { x:M, y:1.08, w:8, h:0.35, fontFace:SANS_M, fontSize:12, color:ORANGE });
-  const disc = [
+// =========================================================== 2 DISCLAIMER
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  s.addImage({path:A+"mobi_logo_navy.png",x:W-M-1.0,y:0.34,w:1.0,h:1.0*MOBI_AR});
+  s.addText("Disclaimer",{x:M,y:0.55,w:8,h:0.7,fontFace:SANS_SB,fontSize:30,color:TITLE,margin:0});
+  const disc=[
     "IGC has been retained by MOBI (“Company”; “Mobi”), on an exclusive basis, to advise the Company in its M&A process (“Transaction”). This material (“Information Memorandum”) describes and summarizes the Company, its assets, market and economic and financial indicators and has been prepared exclusively to assist the recipient in deciding whether it wishes to proceed with a further investigation of a possible Transaction with the Company. In no event shall the recipient use any of this information for any commercial purposes or for purposes other than the one for which this memorandum is furnished.",
-    "All information contained in this Information Memorandum has been prepared based on documents and/or information provided by the Company or obtained directly by IGC through legal sources and/or independent research. IGC has not investigated, verified or audited the documents and information used for the preparation of this Information Memorandum. This Information Memorandum contains statements, estimates and projections provided by the Client concerning anticipated future performance, which may or may not prove to be correct. No representations, expressed or implied, are made as to the accuracy of such statements, estimates and projections.",
-    "This Memorandum of Information is not intended to form any part of the basis of any investment decision and should not be considered as a recommendation by the Company or IGC to any reader. Each reader must make its own valuation of the Transaction in order to determine whether to continue with its participation in the process. No liability is or shall be attributed to the members of IGC, including its partners, directors or employees, in connection with the accuracy or completeness of the information contained herein.",
-    "This material belongs to IGC and shall not be copied, reproduced, distributed and/or disclosed, in whole or in part, including by digital media, to any third party without the express and prior written consent of IGC. By accepting this material, the recipient agrees to return it as soon as requested by IGC and to maintain in strict confidentiality all information contained herein. Since the existence of the Transaction is not publicly disclosed, the recipient agrees not to approach or contact any officer, employee, client, supplier or representative of the Company without the express written permission of IGC.",
+    "All information contained in this Information Memorandum has been prepared based on documents and/or information provided by the Company or obtained directly by IGC through legal sources and/or independent research. IGC has not investigated, verified or audited the documents and information used for its preparation. This Information Memorandum contains statements, estimates and projections provided by the Client concerning anticipated future performance, which may or may not prove correct. No representations, expressed or implied, are made as to their accuracy.",
+    "This Memorandum of Information is not intended to form any part of the basis of any investment decision and should not be considered a recommendation by the Company or IGC. Each reader must make its own valuation of the Transaction to determine whether to continue in the process. No liability is or shall be attributed to the members of IGC, including its partners, directors or employees, in connection with the accuracy or completeness of the information contained herein.",
   ];
-  s.addText(disc.map((t,i)=>({ text:t, options:{ breakLine:true, paraSpaceAfter:6 } })),
-    { x:M, y:1.62, w:7.55, h:5.4, fontFace:SANS, fontSize:8.4, color:"C4CCD6", align:"justify", valign:"top", lineSpacingMultiple:1.02 });
-  // contact panel
-  const px = 8.55, pw = W-px-M;
-  s.addShape(p.ShapeType.roundRect, { x:px, y:1.62, w:pw, h:5.02, rectRadius:0.1, fill:{color:NAVY2}, line:{type:"none"} });
-  s.addText("All communications, questions and/or requests regarding this material shall be addressed directly to IGC.",
-    { x:px+0.35, y:1.95, w:pw-0.7, h:0.9, fontFace:SANS, fontSize:10.5, color:"D6DCE5", valign:"top", lineSpacingMultiple:1.05 });
-  s.addShape(p.ShapeType.line, { x:px+0.35, y:3.0, w:pw-0.7, h:0, line:{color:"49597A", width:1} });
-  s.addText("Bruno Iervolino", { x:px+0.35, y:3.15, w:pw-0.7, h:0.35, fontFace:SERIF_SB, fontSize:15, color:WHITE });
-  s.addText([
-    {text:"Av. Brigadeiro Faria Lima, 2277 – 6th floor", options:{breakLine:true}},
-    {text:"Zip Code 01452-000 – São Paulo, SP", options:{breakLine:true}},
-    {text:"Tel: (55 11) 3815-3533", options:{breakLine:true}},
-    {text:"bruno.iervolino@igcp.com.br", options:{color:ORANGE}},
-  ], { x:px+0.35, y:3.55, w:pw-0.7, h:1.7, fontFace:SANS, fontSize:10.5, color:"C4CCD6", valign:"top", lineSpacingMultiple:1.25 });
-  s.addImage({ path:A+"igc_white.png", x:px+0.35, y:5.7, w:0.7, h:0.7*(778/900) });
+  const disc2=[
+    "This material belongs to IGC and shall not be copied, reproduced, distributed and/or disclosed, in whole or in part, including by digital media, to any third party without the express and prior written consent of IGC. By accepting this material, the recipient agrees to return it as soon as requested by IGC and to maintain strict confidentiality over all information contained herein.",
+    "Since the existence of the Transaction is not publicly disclosed and may not be known by members of the Company or third parties, the recipient agrees not to approach or contact any officer, employee, client, supplier or representative of the Company without the express written permission of IGC. In furnishing this material, IGC undertakes no obligation to provide access to additional information or to update it, and reserves the right, at any time and without notice, to change the procedure for the Transaction or terminate negotiations prior to the execution of any binding agreement.",
+  ];
+  s.addText(disc.map(t=>({text:t,options:{breakLine:true,paraSpaceAfter:8}})),{x:M,y:1.5,w:5.85,h:5.3,fontFace:SANS,fontSize:8.4,color:TXT,align:"justify",valign:"top",lineSpacingMultiple:1.04});
+  s.addText(disc2.map(t=>({text:t,options:{breakLine:true,paraSpaceAfter:8}})),{x:6.7,y:1.5,w:6.05,h:3.6,fontFace:SANS,fontSize:8.4,color:TXT,align:"justify",valign:"top",lineSpacingMultiple:1.04});
+  // contact card
+  rrect(s,6.7,5.2,4.55,1.55,PAPER,{radius:0.1,line:LINE});
+  s.addText("Bruno Iervolino",{x:6.95,y:5.4,w:4,h:0.35,fontFace:SANS_SB,fontSize:15,color:TITLE,margin:0});
+  s.addText("IGC Partners",{x:6.95,y:5.73,w:4,h:0.3,fontFace:SANS_M,fontSize:10.5,color:ORANGE,margin:0});
+  s.addText([{text:"Av. Brigadeiro Faria Lima, 2277 – 6th floor",options:{breakLine:true}},{text:"01452-000 | São Paulo – SP    Tel: (55 11) 3815-3533",options:{breakLine:true}},{text:"bruno.iervolino@igcp.com.br",options:{}}],
+    {x:6.95,y:6.05,w:4.1,h:0.65,fontFace:SANS,fontSize:9,color:GRAY,valign:"top",lineSpacingMultiple:1.15,margin:0});
+  // circular photo bottom-right
+  photoCircle(s,A+"mobi_bus_front.png",11.55,5.15,1.5,{});
+  // wave
+  s.addImage({path:A+"wave_powder.png",x:0,y:H-0.62,w:W,h:0.62});
 })();
 
-// ============================================================ SLIDE 3 — EXECUTIVE SUMMARY / TOC
-(() => {
-  const s = p.addSlide(); bg(s, NAVY);
-  s.addShape(p.ShapeType.rect, { x:0, y:0, w:W, h:H, fill:{color:NAVY} });
-  // large ghost Mobi mark right (fully within right margin)
-  s.addText("Compass", { x:4.6, y:4.75, w:W-0.35-4.6, h:1.9, fontFace:SERIF_BLK, fontSize:62, color:NAVY2, align:"right", valign:"middle", margin:0 });
-  s.addImage({ path:A+"igc_white.png", x:W-0.55-0.62, y:0.34, w:0.62, h:0.62*(778/900) });
-  s.addText("Executive Summary", { x:M, y:0.85, w:8, h:0.8, fontFace:SERIF_SB, fontSize:34, color:WHITE });
-  s.addShape(p.ShapeType.rect, { x:M+0.02, y:1.7, w:0.9, h:0.05, fill:{color:ORANGE} });
-  let y = 2.5;
-  const desc = [
-    "Company snapshot, market context and the platform at a glance",
-    "Value drivers underpinning Mobi’s growth and resilience",
-    "Fleet, footprint, technology, clients, history and structure",
-    "Revenue, profitability and cash-generation profile",
-  ];
+// =========================================================== TOC builder
+function tocSlide(activeIdx){
+  const s=p.addSlide(); bg(s,WHITE);
+  s.addImage({path:A+"mobi_logo_navy.png",x:W-M-1.0,y:0.34,w:1.0,h:1.0*MOBI_AR});
+  // powder band bottom
+  s.addImage({path:A+"wave_powder.png",x:0,y:5.55,w:W,h:0.5});
+  rect(s,0,6.0,W,1.5,POWDER);
+  // photo mosaic left in white frame
+  const fx=M,fy=1.05,fw=6.0,fh=5.5; rrect(s,fx,fy,fw,fh,WHITE,{radius:0.06,line:LINE,shadow:true});
+  const g=0.12, ph=[A+"mobi_fleet2.png",A+"mobi_van.png",A+"mobi_microbus.png",A+"cover_buses.jpeg"];
+  const ix=fx+0.2,iy=fy+0.2,iw=fw-0.4,ih=fh-0.4;
+  const leftW=iw*0.52;
+  s.addImage({path:ph[0],x:ix,y:iy,w:leftW,h:ih*0.72,sizing:{type:"cover",w:leftW,h:ih*0.72}});
+  s.addImage({path:ph[3],x:ix,y:iy+ih*0.72+g,w:leftW,h:ih*0.28-g,sizing:{type:"cover",w:leftW,h:ih*0.28-g}});
+  const rX=ix+leftW+g, rW=iw-leftW-g;
+  s.addImage({path:ph[1],x:rX,y:iy,w:rW,h:ih*0.5-g/2,sizing:{type:"cover",w:rW,h:ih*0.5-g/2}});
+  s.addImage({path:ph[2],x:rX,y:iy+ih*0.5+g/2,w:rW,h:ih*0.5-g/2,sizing:{type:"cover",w:rW,h:ih*0.5-g/2}});
+  // right nav
+  s.addText("Executive Summary",{x:7.15,y:1.15,w:5.6,h:0.7,fontFace:SANS_SB,fontSize:29,color:TITLE,margin:0});
+  let y=2.15; const pw=W-7.15-M, ph2=0.68, gap=0.24;
   SECTIONS.forEach((sec,i)=>{
-    s.addText(String(i+1).padStart(2,"0"), { x:M, y:y, w:0.9, h:0.7, fontFace:SERIF_BLK, fontSize:30, color:ORANGE, valign:"middle", margin:0 });
-    s.addText(sec, { x:M+1.0, y:y-0.02, w:6.6, h:0.42, fontFace:SERIF_SB, fontSize:19, color:WHITE, valign:"middle", margin:0 });
-    s.addText(desc[i], { x:M+1.02, y:y+0.38, w:6.8, h:0.35, fontFace:SANS, fontSize:10.5, color:"AEB7C4", valign:"top", margin:0 });
-    if (i<3) s.addShape(p.ShapeType.line, { x:M+1.0, y:y+0.82, w:6.6, h:0, line:{color:NAVY2, width:1} });
-    y += 1.05;
+    const active=i===activeIdx;
+    rrect(s,7.15,y,pw,ph2,active?SLATE:POWDER_L,{radius:ph2/2});
+    s.addText(String(i+1).padStart(2,"0"),{x:7.5,y:y,w:0.7,h:ph2,fontFace:SANS_SB,fontSize:14,color:active?WHITE:GRAY_L,valign:"middle",margin:0});
+    s.addText(sec,{x:8.25,y:y,w:pw-1.3,h:ph2,fontFace:active?SANS_SB:SANS_M,fontSize:15,color:active?WHITE:GRAY,valign:"middle",margin:0});
+    y+=ph2+gap;
   });
-  s.addImage({ path:A+"mobi_logo_black.png", x:M, y:H-0.95, w:1.5, h:1.5*(246/768) });
-})();
+  s.addImage({path:A+"igc_navy.png",x:M,y:H-0.42,w:0.34,h:0.34*IGC_AR});
+}
 
-// ============================================================ SLIDE 4 — DIVIDER 01
-(() => { divider(p.addSlide(), 0); })();
+// =========================================================== 3 TOC 01
+tocSlide(0);
 
-// ============================================================ SLIDE 5 — MOBI AT A GLANCE
-(() => {
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Introduction", title:"Mobi at a glance",
+// =========================================================== 4 AT A GLANCE
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Introduction",title:"Mobi at a glance",
     subtitle:"A leading platform in corporate employee transportation (fretamento), reaching ~BRL 140 Mn of net revenue in 2025",
-    source:"Source: Company; Jan-2026 fleet register. (1) Owned assets; avg fleet age of 4 years per Company materials vs. ~6 years per chassis manufacture year – to reconcile. (2) Owned assets. (3) To be confirmed with Company.",
-    page:5 });
-  // LEFT: highlight rows
-  const rows = [
-    ["award", "+20 years of experience", "One of the leading platforms in corporate mobility, serving industrial, agribusiness and consumer-goods clients across the Midwest and Southeast of Brazil"],
-    ["contract", "Recurring, blue-chip portfolio", "A strong base of long-term recurring-revenue contracts with blue-chip clients, reflecting trusted, long-standing partnerships"],
-    ["truck", "Modern, fully-owned fleet", "373 vehicles with an average age of ~6 years¹, spanning buses, micro-buses and vans for a flexible, tailored service offering"],
-    ["shield", "Reliable, technology-enabled ops", "GPS-based telemetry and driver-monitoring systems, with in-house maintenance capabilities [to be confirmed], ensuring high performance"],
+    source:"Source: Company; Jan-2026 fleet register. (1) Owned assets; avg fleet age 4 yrs per Company materials vs ~6 yrs per chassis manufacture year – to reconcile. (2) Owned assets.",page:4});
+  const rows=[
+    ["award","+20 years of experience","One of the leading platforms in corporate mobility, serving industrial, agribusiness and consumer-goods clients"],
+    ["contract","Recurring, blue-chip portfolio","A strong base of long-term recurring-revenue contracts with blue-chip clients and trusted partnerships"],
+    ["truck","Modern, fully-owned fleet","373 vehicles, avg age ~6 years¹, across buses, micro-buses and vans for a flexible service offering"],
+    ["mappin","Midwest & Southeast footprint","Headquarters in Goiânia plus 10 operational bases across Goiás, the Federal District and Minas Gerais"],
+    ["activity","Technology-enabled operations","GPS telemetry and driver monitoring, with in-house maintenance [TBC], ensuring high reliability"],
+    ["users","Experienced, scalable team","A seasoned management team and a workforce built for continued, safety-focused growth"],
   ];
-  let y = 2.0;
-  rows.forEach(([icon,h,d])=>{
-    chip(s, M, y, 0.62, icon, {fill:PAPER, color:"orange"});
-    s.addText(h, { x:M+0.82, y:y-0.04, w:4.9, h:0.32, fontFace:SANS_SB, fontSize:12.5, color:NAVY, valign:"top", margin:0 });
-    s.addText(d, { x:M+0.82, y:y+0.28, w:4.95, h:0.9, fontFace:SANS, fontSize:9.6, color:GRAY, valign:"top", margin:0, lineSpacingMultiple:1.02 });
-    y += 1.22;
+  const cw=(W-2*M-0.5)/2, rh=1.02;
+  rows.forEach((r,i)=>{ const x=M+(i%2)*(cw+0.5), y=2.0+Math.floor(i/2)*rh;
+    iconChip(s,x,y+0.06,0.58,r[0]);
+    s.addText(r[1],{x:x+0.76,y:y,w:cw-0.8,h:0.3,fontFace:SANS_SB,fontSize:12,color:TITLE,valign:"top",margin:0});
+    s.addText(r[2],{x:x+0.76,y:y+0.3,w:cw-0.8,h:0.6,fontFace:SANS,fontSize:9.3,color:GRAY,valign:"top",margin:0,lineSpacingMultiple:1.0});
+    if(i<4) s.addShape(p.ShapeType.line,{x:x+0.76,y:y+0.94,w:cw-0.8,h:0,line:{color:LINE,width:1}});
   });
-  // RIGHT top: gross revenue chart
-  const rx = 6.95, rw = W-rx-M;
-  card(s, rx, 2.0, rw, 2.55, {});
-  s.addText("Gross revenue by entity — 1Q25 vs. 1Q26", { x:rx+0.28, y:2.16, w:rw-1.6, h:0.3, fontFace:SANS_SB, fontSize:11, color:NAVY, margin:0 });
-  s.addText("BRL Mn", { x:rx+0.28, y:2.44, w:2, h:0.24, fontFace:SANS, fontSize:8.5, color:GRAY, margin:0 });
-  s.addShape(p.ShapeType.roundRect, { x:rx+rw-1.55, y:2.14, w:1.3, h:0.42, rectRadius:0.06, fill:{color:"FDE7DD"}, line:{type:"none"} });
-  s.addText("+41.3% YoY", { x:rx+rw-1.55, y:2.14, w:1.3, h:0.42, fontFace:SANS_SB, fontSize:10.5, color:ORANGE_D, align:"center", valign:"middle", margin:0 });
-  s.addChart(p.ChartType.bar, [
-    { name:"1Q25", labels:["AGM Caetano","AGM Alpha"], values:[26.62,4.16] },
-    { name:"1Q26", labels:["AGM Caetano","AGM Alpha"], values:[36.22,7.25] },
-  ], { x:rx+0.15, y:2.7, w:rw-0.3, h:1.75, barDir:"col", barGrouping:"clustered",
-       chartColors:[NAVY2, ORANGE], showLegend:true, legendPos:"b", legendFontFace:SANS, legendFontSize:9, legendColor:GRAY,
-       showValue:true, dataLabelFontFace:SANS_SB, dataLabelFontSize:9, dataLabelColor:NAVY, dataLabelPosition:"outEnd", dataLabelFormatCode:"0.0",
-       catAxisLabelFontFace:SANS_M, catAxisLabelFontSize:9.5, catAxisLabelColor:TXT, catGridLine:{style:"none"},
-       valAxisHidden:true, valGridLine:{style:"none"}, valAxisMaxVal:44, barGapWidthPct:60, chartColorsOpacity:100 });
-  // RIGHT bottom: 4 stat tiles (Highlights)
-  s.addText("HIGHLIGHTS", { x:rx, y:4.72, w:4, h:0.26, fontFace:SANS_SB, fontSize:10, color:ORANGE, charSpacing:2 });
-  const tiles = [
-    ["~BRL 140 Mn", "Net revenue 2025"],
-    ["~BRL 36 Mn", "EBITDA 2025 (~26% margin)"],
-    ["~BRL 198 Mn", "Fleet value²"],
-    ["373", "Vehicles · 100% owned"],
-  ];
-  const tw = (rw-0.3)/2, th = 0.98;
-  tiles.forEach((t,i)=>{
-    const tx = rx + (i%2)*(tw+0.3), ty = 5.06 + Math.floor(i/2)*(th+0.18);
-    card(s, tx, ty, tw, th, {fill:PAPER, line:LINE, shadow:false});
-    s.addText(t[0], { x:tx+0.22, y:ty+0.12, w:tw-0.4, h:0.44, fontFace:SERIF_BLK, fontSize:19, color:ORANGE, margin:0, valign:"middle" });
-    s.addText(t[1], { x:tx+0.22, y:ty+0.56, w:tw-0.4, h:0.34, fontFace:SANS, fontSize:9, color:GRAY, margin:0, valign:"top" });
+  // highlight stat cards
+  const tiles=[["~BRL 140 Mn","Net revenue 2025"],["~BRL 36 Mn","EBITDA (~26% margin)"],["~BRL 198 Mn","Fleet value²"],["373","Vehicles · 100% owned"]];
+  const tw=(W-2*M-3*0.3)/4;
+  tiles.forEach((t,i)=>{ const x=M+i*(tw+0.3), y=5.35, h=1.05;
+    rrect(s,x,y,tw,h,PAPER,{radius:0.09,line:LINE});
+    s.addShape(p.ShapeType.rect,{x:x,y:y+0.18,w:0.09,h:0.69,fill:{color:ORANGE}});
+    s.addText(t[0],{x:x+0.28,y:y+0.16,w:tw-0.4,h:0.46,fontFace:SANS_SB,fontSize:19,color:TITLE,margin:0,valign:"middle"});
+    s.addText(t[1],{x:x+0.28,y:y+0.62,w:tw-0.4,h:0.34,fontFace:SANS,fontSize:9,color:GRAY,margin:0,valign:"top"});
   });
 })();
 
-// ============================================================ SLIDE 6 — DIVIDER 02
-(() => { divider(p.addSlide(), 1); })();
+// =========================================================== 5 PLATFORM / MOMENTUM
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Introduction",title:"A scalable platform with strong recent momentum",
+    subtitle:"Operations concentrated in the high-growth Midwest–Southeast corridor, with double-digit revenue growth",
+    source:"Source: Company. Gross revenue by operating entity. (1) 1Q gross revenue growth year-over-year.",page:5});
+  // choropleth left
+  const mh=4.0, mw=mh*(2000/1878);
+  s.addImage({path:A+"brazil_choro.png",x:M-0.1,y:2.05,w:mw,h:mh});
+  const leg=[["Core state — Goiás (HQ)",SLATE_D],["Operating states — DF & MG",SLATE]];
+  let ly=6.2; leg.forEach(l=>{ s.addShape(p.ShapeType.rect,{x:M+0.15,y:ly,w:0.2,h:0.2,fill:{color:l[1]}}); s.addText(l[0],{x:M+0.45,y:ly-0.06,w:3.5,h:0.32,fontFace:SANS,fontSize:9,color:GRAY,valign:"middle",margin:0}); ly+=0.32; });
+  // right: chart + stats
+  const rx=5.5, rw=W-rx-M;
+  rrect(s,rx,2.05,rw,2.75,PAPER,{radius:0.1,line:LINE});
+  s.addText("Gross revenue by entity — 1Q25 vs. 1Q26",{x:rx+0.3,y:2.22,w:rw-1.7,h:0.3,fontFace:SANS_SB,fontSize:11.5,color:TITLE,margin:0});
+  s.addText("BRL Mn",{x:rx+0.3,y:2.5,w:2,h:0.24,fontFace:SANS,fontSize:8.5,color:GRAY,margin:0});
+  rrect(s,rx+rw-1.65,2.2,1.35,0.44,POWDER,{radius:0.08});
+  s.addText("+41.3% YoY¹",{x:rx+rw-1.65,y:2.2,w:1.35,h:0.44,fontFace:SANS_SB,fontSize:10.5,color:SLATE_D,align:"center",valign:"middle",margin:0});
+  colChart(s,p.ChartType.bar,[
+    {name:"1Q25",labels:["AGM Caetano","AGM Alpha"],values:[26.62,4.16]},
+    {name:"1Q26",labels:["AGM Caetano","AGM Alpha"],values:[36.22,7.25]},
+  ],rx+0.2,2.8,rw-0.4,1.85,{barGrouping:"clustered",chartColors:[CHART_LT,SLATE],dataLabelFormatCode:"0.0",showLegend:true,legendPos:"b",legendFontFace:SANS,legendFontSize:9,legendColor:GRAY,valAxisMaxVal:44,catAxisLabelFontSize:10,catAxisLabelColor:TXT});
+  // stat callouts
+  const st=[["~BRL 140 Mn","Net revenue 2025"],["~26%","EBITDA margin 2025"],["10","Operational bases · 3 states"]];
+  const sw=(rw-2*0.3)/3;
+  st.forEach((t,i)=>{ const x=rx+i*(sw+0.3), y=5.05, h=1.3;
+    rrect(s,x,y,sw,h,WHITE,{radius:0.09,line:LINE,shadow:true});
+    s.addText(t[0],{x:x+0.1,y:y+0.22,w:sw-0.2,h:0.5,fontFace:SANS_SB,fontSize:20,color:ORANGE,align:"center",valign:"middle",margin:0});
+    s.addText(t[1],{x:x+0.15,y:y+0.74,w:sw-0.3,h:0.44,fontFace:SANS,fontSize:9,color:GRAY,align:"center",valign:"top",margin:0,lineSpacingMultiple:0.95});
+  });
+})();
 
-// ============================================================ SLIDE 7 — INVESTMENT THESIS
-(() => {
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Investment Thesis", title:"Mobi is well positioned for continued growth",
+// =========================================================== 6 TOC 02
+tocSlide(1);
+
+// =========================================================== 7 INVESTMENT THESIS
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Investment Thesis",title:"Mobi is well positioned for continued growth",
     subtitle:"A resilient, contracted business model supported by strong structural value drivers",
-    source:"Source: Company; press research. NR-31 refers to Brazilian rural-labor safety regulation on worker transport.", page:7 });
-  const pil = [
-    ["Exposure to a large, structurally growing market", "Structural demand for corporate employee transportation is driven by clients’ operational needs, a national shortage of professional drivers, and labor regulations (NR-31) requiring compliant transport where public transit is inadequate."],
-    ["Solid, contracted revenue model with high stickiness", "Long-term contracts (3–5 years) with built-in annual adjustment mechanisms (IPCA, collective-bargaining agreements and diesel-price pass-through) protect margins and reinforce client retention."],
-    ["An asset base that compounds competitive advantage", "A modern, fully-owned fleet of 373 vehicles across buses, micro-buses and vans creates operational flexibility, service-quality control and barriers that are hard for competitors to replicate."],
-    ["Integrated capabilities that deliver a full-service edge", "GPS-based telemetry and driver-monitoring systems — combined with in-house maintenance capabilities [to be confirmed] — position Mobi as a reliable, high-uptime operator across its network of bases."],
-    ["Multiple, executable growth avenues", "Geographic expansion, fleet electrification, technology-enabled services and consolidation of a fragmented market create a clear and executable path for continued value creation."],
+    source:"Source: Company; press research. NR-31 = Brazilian rural-labor safety regulation on worker transport.",page:7});
+  const pil=[
+    "Exposure to a large, structurally growing corporate mobility market — driven by client operational needs, a national driver shortage and labor regulations (NR-31)",
+    "Solid, contracted revenue model with high stickiness — long-term contracts (3–5 years) with IPCA, CBA and diesel pass-through adjustments protecting margins",
+    "An asset base that compounds competitive advantage — a modern, fully-owned 373-vehicle fleet creating flexibility and hard-to-replicate barriers",
+    "Integrated capabilities delivering a full-service edge — GPS telemetry and driver monitoring, with in-house maintenance [TBC], for a high-uptime operation",
+    "Multiple, executable growth avenues — geographic expansion, fleet electrification, technology-enabled services and consolidation of a fragmented market",
   ];
-  const colW = (W-2*M-0.4)/2;
-  const icons = ["trendup","repeat","truck","shield","target"];
-  // layout: 3 left, 2 right
-  const positions = [[M,2.0],[M,3.75],[M,5.5],[M+colW+0.4,2.0],[M+colW+0.4,3.75]];
-  pil.forEach((pr,i)=>{
-    if (i>=4){ // 5th spans wider on right lower — place at right col row3
-      positions[i] = [M+colW+0.4, 5.5];
-    }
-    const [x,y] = positions[i];
-    const h = 1.6;
-    card(s, x, y, colW, h, {});
-    s.addText(String(i+1).padStart(2,"0"), { x:x+0.22, y:y+0.18, w:0.95, h:0.9, fontFace:SERIF_BLK, fontSize:40, color:"E9DCC9", valign:"top", margin:0 });
-    s.addImage({ path:ic(icons[i],"orange"), x:x+0.28, y:y+1.02, w:0.34, h:0.34 });
-    s.addText(pr[0], { x:x+1.15, y:y+0.2, w:colW-1.35, h:0.5, fontFace:SANS_SB, fontSize:12, color:NAVY, valign:"top", margin:0, lineSpacingMultiple:0.98 });
-    s.addText(pr[1], { x:x+1.15, y:y+0.66, w:colW-1.35, h:0.85, fontFace:SANS, fontSize:9, color:GRAY, valign:"top", margin:0, lineSpacingMultiple:1.0 });
+  let y=2.15;
+  pil.forEach((t,i)=>{
+    const d=0.62; s.addShape(p.ShapeType.ellipse,{x:M,y:y,w:d,h:d,fill:{color:i%2?SLATE:SLATE_D},line:{type:"none"}});
+    s.addText(String(i+1),{x:M,y:y,w:d,h:d,fontFace:SANS_SB,fontSize:20,color:WHITE,align:"center",valign:"middle",margin:0});
+    const parts=t.split(" — ");
+    s.addText([{text:parts[0],options:{fontFace:SANS_SB,color:TITLE}},{text:"  —  "+parts[1],options:{fontFace:SANS,color:GRAY}}],
+      {x:M+0.85,y:y-0.05,w:7.4,h:0.75,fontSize:11.5,valign:"middle",margin:0,lineSpacingMultiple:1.02});
+    y+=0.93;
   });
+  // decorative circular photo stack right
+  photoCircle(s,A+"mobi_fleet2.png",9.5,2.5,3.0,{});
+  photoCircle(s,A+"mobi_microbus.png",11.0,5.05,1.7,{});
 })();
 
-// ============================================================ SLIDE 8 — TRACK RECORD
-(() => {
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Investment Thesis", title:"A solid track record with blue-chip clients",
-    subtitle:"Mobi has consistently focused on long-term contracts across industrial, agribusiness and consumer-goods sectors",
-    source:"Source: Company. Client relationship metrics (contracts delivered, years, share of revenue) to be confirmed with management.", page:8 });
-  // client logo grid
-  s.addText("SELECTED CLIENTS", { x:M, y:2.0, w:5, h:0.26, fontFace:SANS_SB, fontSize:10, color:ORANGE, charSpacing:2 });
-  const clients = ["cli_votorantim","cli_cargill","cli_jbs","cli_kraftheinz","cli_mbrf","cli_heineken"];
-  const gx=M, gy=2.42, gw=7.5, gh=3.55, cols=2, rows=3;
-  const cw=(gw-0.3)/cols, chh=(gh-0.4)/rows;
-  clients.forEach((c,i)=>{
-    const x=gx+(i%cols)*(cw+0.3), y=gy+Math.floor(i/cols)*(chh+0.2);
-    card(s, x, y, cw, chh, {fill:WHITE, line:LINE, shadow:false});
-    s.addImage({ path:A+c+".png", x:x+0.35, y:y+chh*0.2, w:cw-0.7, h:chh*0.6, sizing:{type:"contain", w:cw-0.7, h:chh*0.6} });
+// =========================================================== 8 PILLAR 1 TRACK RECORD
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Investment Thesis",num:1,title:"A solid track record with blue-chip clients",
+    subtitle:"Long-term contracts across industrial, agribusiness and consumer-goods sectors",
+    source:"Source: Company. Client relationship metrics (contracts delivered, years, share of revenue) to be confirmed with management.",page:8});
+  s.addText("SELECTED CLIENTS",{x:M,y:2.0,w:5,h:0.26,fontFace:SANS_SB,fontSize:9.5,color:ORANGE,charSpacing:1.5,margin:0});
+  const clients=["cli_votorantim","cli_cargill","cli_jbs","cli_kraftheinz","cli_mbrf","cli_heineken"];
+  const gx=M,gy=2.36,gw=7.4,cols=3,rows=2, cw=(gw-2*0.25)/cols, chh=1.35;
+  clients.forEach((c,i)=>{ const x=gx+(i%cols)*(cw+0.25), y=gy+Math.floor(i/cols)*(chh+0.22);
+    rrect(s,x,y,cw,chh,WHITE,{radius:0.08,line:LINE,shadow:true});
+    s.addImage({path:A+c+".png",x:x+0.25,y:y+chh*0.22,w:cw-0.5,h:chh*0.56,sizing:{type:"contain",w:cw-0.5,h:chh*0.56}});
   });
-  // right: relationship stat cards + highlights bar
-  const rx=8.4, rw=W-rx-M;
-  const stats=[["Recurring","revenue contract model"],["3–5 years","average contract term"],["[XXX]","contracts executed"],["[XXX]","of contract backlog"]];
-  s.addText("PORTFOLIO CHARACTERISTICS", { x:rx, y:2.0, w:rw, h:0.26, fontFace:SANS_SB, fontSize:10, color:ORANGE, charSpacing:1.5 });
-  let y=2.42;
-  const sicons=["repeat","clock","contract","barchart"];
-  stats.forEach((t,i)=>{
-    card(s, rx, y, rw, 0.78, {fill:PAPER, line:LINE, shadow:false});
-    chip(s, rx+0.16, y+0.14, 0.5, sicons[i], {fill:WHITE, color:"orange"});
-    s.addText(t[0], { x:rx+0.8, y:y+0.1, w:rw-0.95, h:0.36, fontFace:SERIF_BLK, fontSize:16, color:NAVY, margin:0, valign:"middle" });
-    s.addText(t[1], { x:rx+0.8, y:y+0.44, w:rw-0.95, h:0.28, fontFace:SANS, fontSize:9, color:GRAY, margin:0, valign:"top" });
-    y+=0.9;
-  });
+  // right stat cards
+  const rx=8.35,rw=W-rx-M;
+  s.addText("PORTFOLIO CHARACTERISTICS",{x:rx,y:2.0,w:rw,h:0.26,fontFace:SANS_SB,fontSize:9.5,color:ORANGE,charSpacing:1,margin:0});
+  const stats=[["repeat","Recurring","revenue contract model"],["clock","3–5 years","average contract term"],["contract","[XXX]","contracts executed"],["barchart","[XXX]","of contract backlog"]];
+  let y=2.36;
+  stats.forEach(t=>{ rrect(s,rx,y,rw,0.82,PAPER,{radius:0.09,line:LINE}); iconChip(s,rx+0.18,y+0.16,0.5,t[0]);
+    s.addText(t[1],{x:rx+0.82,y:y+0.11,w:rw-1,h:0.38,fontFace:SANS_SB,fontSize:16,color:TITLE,margin:0,valign:"middle"});
+    s.addText(t[2],{x:rx+0.82,y:y+0.47,w:rw-1,h:0.28,fontFace:SANS,fontSize:9,color:GRAY,margin:0,valign:"top"});
+    y+=0.95; });
+  conclusionBand(s,"A recurring, contracted revenue base with blue-chip clients underpins visibility and resilience",{y:H-0.95,h:0.62});
 })();
 
-// ============================================================ SLIDE 9 — FLEET
-(() => {
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Company Overview", title:"A modern, fully-owned fleet tailored to client needs",
-    subtitle:"Fleet composition and leading chassis brands across a 373-vehicle base",
-    source:"Source: Company; Jan-2026 fleet register. (1) Based on chassis manufacture year; Company materials cite 4 years – to reconcile. (2) 373 owned assets (100% of fleet). (3) Owned assets.", page:9 });
-  // LEFT dark highlights panel
-  const px=M, pw=3.1;
-  s.addShape(p.ShapeType.roundRect, { x:px, y:2.0, w:pw, h:4.05, rectRadius:0.12, fill:{color:NAVY}, line:{type:"none"} });
-  s.addText("HIGHLIGHTS", { x:px+0.3, y:2.22, w:pw-0.6, h:0.3, fontFace:SANS_SB, fontSize:10, color:ORANGE, charSpacing:2 });
-  const hl=[["~6 years","Average fleet age¹"],["373","Total fleet²"],["~BRL 198 Mn","Total equipment value³"],["100%","Owned fleet"]];
-  let hy=2.62;
-  hl.forEach((t,i)=>{
-    s.addText(t[0], { x:px+0.3, y:hy, w:pw-0.6, h:0.44, fontFace:SERIF_BLK, fontSize:23, color:WHITE, margin:0, valign:"bottom" });
-    s.addText(t[1], { x:px+0.3, y:hy+0.46, w:pw-0.6, h:0.3, fontFace:SANS, fontSize:9.5, color:"AEB7C4", margin:0, valign:"top" });
-    if(i<3) s.addShape(p.ShapeType.line, { x:px+0.3, y:hy+0.82, w:pw-0.6, h:0, line:{color:NAVY2,width:1} });
-    hy+=0.86;
-  });
-  // MIDDLE fleet composition
-  const mx=3.95, mw=4.35;
-  s.addText("FLEET COMPOSITION", { x:mx, y:2.0, w:mw, h:0.26, fontFace:SANS_SB, fontSize:10, color:ORANGE, charSpacing:1.5 });
-  const comp=[["Bus","223","truck"],["Micro-bus","74","truck"],["Van","55","truck"],["Support vehicle","17","tool"],["Truck","2","truck"],["Pickup truck","2","truck"]];
-  const maxv=223;
-  let cy=2.44;
-  comp.forEach(([name,val,icon])=>{
-    s.addText(name, { x:mx, y:cy, w:2.0, h:0.3, fontFace:SANS_M, fontSize:10.5, color:TXT, valign:"middle", margin:0 });
-    s.addText(val+" un.", { x:mx+mw-1.0, y:cy, w:1.0, h:0.3, fontFace:SANS_SB, fontSize:10.5, color:NAVY, align:"right", valign:"middle", margin:0 });
-    const barY=cy+0.32, barMax=mw;
-    s.addShape(p.ShapeType.roundRect, { x:mx, y:barY, w:barMax, h:0.14, rectRadius:0.07, fill:{color:CARD}, line:{type:"none"} });
-    s.addShape(p.ShapeType.roundRect, { x:mx, y:barY, w:Math.max(0.16,barMax*(parseInt(val)/maxv)), h:0.14, rectRadius:0.07, fill:{color:ORANGE}, line:{type:"none"} });
-    cy+=0.6;
-  });
-  // photo top-right
-  const rx=8.55, rw=W-rx-M;
-  s.addImage({ path:A+"mobi_microbus.png", x:rx, y:2.0, w:rw, h:1.85, rounding:true, sizing:{type:"cover", w:rw, h:1.85} });
-  // chassis brand logos grid
-  s.addText("LEADING CHASSIS & EQUIPMENT BRANDS", { x:rx, y:3.98, w:rw, h:0.26, fontFace:SANS_SB, fontSize:9, color:ORANGE, charSpacing:1 });
+// =========================================================== 9 PILLAR 2 FLEET
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Investment Thesis",num:2,title:"A modern, fully-owned fleet tailored to client needs",
+    subtitle:"373 vehicles across buses, micro-buses and vans, sourced from leading chassis brands",
+    source:"Source: Company; Jan-2026 fleet register. (1) Based on chassis manufacture year; Company materials cite 4 years – to reconcile. (2) Owned assets.",page:9});
+  // left highlights (slate panel)
+  const px=M,pw=3.05; rrect(s,px,2.0,pw,4.0,SLATE_D,{radius:0.12});
+  s.addText("HIGHLIGHTS",{x:px+0.3,y:2.22,w:pw-0.6,h:0.3,fontFace:SANS_SB,fontSize:10,color:POWDER,charSpacing:2,margin:0});
+  const hl=[["~6 years","Average fleet age¹"],["373","Total fleet"],["~BRL 198 Mn","Total equipment value²"],["100%","Owned fleet"]];
+  let hy=2.62; hl.forEach((t,i)=>{ s.addText(t[0],{x:px+0.3,y:hy,w:pw-0.6,h:0.44,fontFace:SANS_SB,fontSize:22,color:WHITE,margin:0,valign:"bottom"});
+    s.addText(t[1],{x:px+0.3,y:hy+0.46,w:pw-0.6,h:0.3,fontFace:SANS,fontSize:9.5,color:POWDER,margin:0,valign:"top"});
+    if(i<3) s.addShape(p.ShapeType.line,{x:px+0.3,y:hy+0.82,w:pw-0.6,h:0,line:{color:SLATE,width:1}}); hy+=0.86; });
+  // middle composition
+  const mx=3.95,mw=4.3; s.addText("FLEET COMPOSITION",{x:mx,y:2.0,w:mw,h:0.26,fontFace:SANS_SB,fontSize:9.5,color:ORANGE,charSpacing:1,margin:0});
+  const comp=[["Bus","223"],["Micro-bus","74"],["Van","55"],["Support vehicle","17"],["Truck","2"],["Pickup truck","2"]];
+  const maxv=223; let cy=2.44;
+  comp.forEach(([n,v])=>{ s.addText(n,{x:mx,y:cy,w:2.2,h:0.3,fontFace:SANS_M,fontSize:10.5,color:TXT,valign:"middle",margin:0});
+    s.addText(v+" un.",{x:mx+mw-1.0,y:cy,w:1.0,h:0.3,fontFace:SANS_SB,fontSize:10.5,color:TITLE,align:"right",valign:"middle",margin:0});
+    const by=cy+0.32; rrect(s,mx,by,mw,0.14,CARD,{radius:0.07}); rrect(s,mx,by,Math.max(0.16,mw*(parseInt(v)/maxv)),0.14,SLATE,{radius:0.07}); cy+=0.6; });
+  // right photo + brands
+  const rx=8.55,rw=W-rx-M;
+  photoCircle(s,A+"mobi_van.png",rx+rw/2-1.0,2.0,2.0,{});
+  s.addText("LEADING CHASSIS & EQUIPMENT BRANDS",{x:rx,y:4.15,w:rw,h:0.26,fontFace:SANS_SB,fontSize:8.5,color:ORANGE,charSpacing:0.5,margin:0});
   const brands=["br_mercedes","br_volvo","br_scania","br_ford","br_hyundai","br_cat","br_komatsu","br_liebherr"];
-  const bx=rx, by=4.3, bcols=2, bw=(rw-0.2)/bcols, bh=0.5;
-  brands.forEach((b,i)=>{
-    const x=bx+(i%bcols)*(bw+0.2), y=by+Math.floor(i/bcols)*(bh+0.12);
-    card(s, x, y, bw, bh, {fill:WHITE, line:LINE, shadow:false, radius:0.06});
-    s.addImage({ path:A+b+".png", x:x+0.18, y:y+0.08, w:bw-0.36, h:bh-0.16, sizing:{type:"contain", w:bw-0.36, h:bh-0.16} });
+  const bx=rx,by=4.46,bcols=2,bw=(rw-0.2)/bcols,bh=0.5;
+  brands.forEach((b,i)=>{ const x=bx+(i%bcols)*(bw+0.2), y=by+Math.floor(i/bcols)*(bh+0.1);
+    rrect(s,x,y,bw,bh,WHITE,{radius:0.06,line:LINE}); s.addImage({path:A+b+".png",x:x+0.18,y:y+0.08,w:bw-0.36,h:bh-0.16,sizing:{type:"contain",w:bw-0.36,h:bh-0.16}}); });
+})();
+
+// =========================================================== 10 PILLAR 3 TECH
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Investment Thesis",num:3,title:"Technology-enabled operations support high reliability",
+    subtitle:"GPS telemetry, driver monitoring and operational discipline keep the fleet running reliably",
+    source:"Source: Company. Availability and preventive-maintenance metrics, and scope of in-house maintenance, to be confirmed with management.",page:10});
+  const groups=[
+    ["activity","GPS Telemetry & Driver Monitoring",["sw_ituran","sw_vtraxx"],"GPS-based tracking and AI-powered driver-fatigue monitoring provide continuous oversight across all bases"],
+    ["cpu","ERP & Management",["sw_totvs"],"TOTVS Protheus underpins enterprise resource planning and back-office control"],
+    ["tool","Fleet & Maintenance Management",["sw_truckscontrol","sw_zion","sw_opensystem","sw_monaco"],"Specialized systems manage maintenance workflows, parts and fleet operations"],
+    ["shield","Safety, PPE & Inspection",["sw_sisma","sw_onsafety","sw_checklistfacil"],"Digital checklists, PPE control and safety management reinforce operational discipline"],
+  ];
+  const gw=(W-2*M-0.4)/2, gh=1.78;
+  groups.forEach((g,i)=>{ const x=M+(i%2)*(gw+0.4), y=2.0+Math.floor(i/2)*(gh+0.25);
+    rrect(s,x,y,gw,gh,PAPER,{radius:0.1,line:LINE});
+    iconChip(s,x+0.24,y+0.22,0.5,g[0]);
+    s.addText(g[1],{x:x+0.86,y:y+0.24,w:gw-1.05,h:0.44,fontFace:SANS_SB,fontSize:11.5,color:TITLE,valign:"middle",margin:0,lineSpacingMultiple:0.95});
+    s.addText(g[3],{x:x+0.24,y:y+0.78,w:gw-0.48,h:0.5,fontFace:SANS,fontSize:8.8,color:GRAY,valign:"top",margin:0,lineSpacingMultiple:1.0});
+    const logos=g[2],n=logos.length,gapL=0.18,maxCell=1.3,cellW=Math.min(maxCell,(gw-0.48-gapL*(n-1))/n),tot=cellW*n+gapL*(n-1),sX=x+(gw-tot)/2;
+    logos.forEach((lg,j)=>{ s.addImage({path:A+lg+".png",x:sX+j*(cellW+gapL),y:y+gh-0.5,w:cellW,h:0.4,sizing:{type:"contain",w:cellW,h:0.4}}); });
   });
 })();
 
-// ============================================================ SLIDE 10 — FOOTPRINT
-(() => {
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Company Overview", title:"Strategically positioned across the Midwest and Southeast",
+// =========================================================== 11 GROWTH AVENUES
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Investment Thesis",num:4,title:"Multiple avenues for continued value creation",
+    subtitle:"Geographic expansion, consolidation and fleet electrification position Mobi for a sustained growth trajectory",
+    source:"Source: Company; press research. Growth avenues to be validated with management.",page:11});
+  const av=[
+    ["mappin","Deepen share & expand geographically","Grow wallet share with existing clients and win new logos; expand within the GO–DF–MG corridor and selectively into adjacent regions, leveraging existing bases"],
+    ["zap","Electrification & tech-enabled services","Gradual fleet electrification aligned to clients’ ESG and Scope-3 goals; a technology layer (route optimization, apps, carbon dashboards) deepens stickiness"],
+    ["layers","Consolidate a fragmented market","A highly fragmented Brazilian market with consolidation underway; Mobi’s scale and track record position it as a natural platform for smaller regional operators"],
+  ];
+  const cw=(W-2*M-0.8)/3;
+  av.forEach((a,i)=>{ const x=M+i*(cw+0.4), y=2.4, h=3.5;
+    rrect(s,x,y,cw,h,PAPER,{radius:0.12,line:LINE,shadow:true});
+    iconChip(s,x+cw/2-0.42,y+0.4,0.84,a[0]);
+    s.addText(String.fromCharCode(65+i),{x:x+cw-0.7,y:y+0.25,w:0.5,h:0.5,fontFace:SANS_SB,fontSize:22,color:CHART_LT,align:"center",valign:"middle",margin:0});
+    s.addText(a[1],{x:x+0.3,y:y+1.4,w:cw-0.6,h:0.75,fontFace:SANS_SB,fontSize:13,color:TITLE,align:"center",valign:"top",margin:0,lineSpacingMultiple:1.0});
+    s.addText(a[2],{x:x+0.32,y:y+2.2,w:cw-0.64,h:1.15,fontFace:SANS,fontSize:9.5,color:GRAY,align:"center",valign:"top",margin:0,lineSpacingMultiple:1.05});
+  });
+})();
+
+// =========================================================== 12 TOC 03
+tocSlide(2);
+
+// =========================================================== 13 FOOTPRINT
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Company Overview",title:"Strategically positioned across the Midwest and Southeast",
     subtitle:"From its Goiânia headquarters to 10 operational bases across Goiás, the Federal District and Minas Gerais",
-    source:"Source: Company; Jan-2026 fleet register.", page:10 });
-  // map left
-  const mapH=4.0, mapW=mapH*(2000/1878);
-  s.addImage({ path:A+"brazil_map.png", x:M-0.1, y:2.15, w:mapW, h:mapH });
-  // legend
-  s.addShape(p.ShapeType.rect, { x:M+0.2, y:6.25, w:0.18, h:0.18, fill:{color:ORANGE} });
-  s.addText("States with operational bases", { x:M+0.45, y:6.18, w:3.6, h:0.32, fontFace:SANS, fontSize:9, color:GRAY, valign:"middle", margin:0 });
-  // right: HQ + bases
-  const rx=5.4, rw=W-rx-M;
-  card(s, rx, 2.0, rw, 1.02, {fill:NAVY, line:null, shadow:true});
-  chip(s, rx+0.26, 2.2, 0.56, "home", {fill:NAVY2, color:"orange"});
-  s.addText("Headquarters — Goiânia, GO", { x:rx+1.0, y:2.14, w:rw-1.25, h:0.32, fontFace:SANS_SB, fontSize:13, color:WHITE, margin:0, valign:"top" });
-  s.addText("Corporate HQ (Garagem Central) centralizing fleet management, monitoring infrastructure and administrative functions", { x:rx+1.0, y:2.46, w:rw-1.25, h:0.5, fontFace:SANS, fontSize:9.2, color:"C4CCD6", margin:0, valign:"top", lineSpacingMultiple:1.0 });
-  s.addText("10 ACTIVE OPERATIONAL BASES", { x:rx, y:3.14, w:rw, h:0.26, fontFace:SANS_SB, fontSize:10, color:ORANGE, charSpacing:1.5 });
+    source:"Source: Company; Jan-2026 fleet register.",page:13});
+  const mh=3.6, mw=mh*(2000/1878);
+  s.addImage({path:A+"brazil_map.png",x:M-0.1,y:2.05,w:mw,h:mh});
+  const rx=5.3,rw=W-rx-M;
+  rrect(s,rx,2.0,rw,1.0,SLATE_D,{radius:0.1,shadow:true});
+  iconChip(s,rx+0.24,2.2,0.56,"home",{fill:SLATE});
+  s.addText("Headquarters — Goiânia, GO",{x:rx+0.98,y:2.14,w:rw-1.2,h:0.32,fontFace:SANS_SB,fontSize:13,color:WHITE,valign:"top",margin:0});
+  s.addText("Corporate HQ (Garagem Central) centralizing fleet management, monitoring infrastructure and administration",{x:rx+0.98,y:2.46,w:rw-1.2,h:0.5,fontFace:SANS,fontSize:9.2,color:POWDER,valign:"top",margin:0,lineSpacingMultiple:1.0});
+  s.addText("10 ACTIVE OPERATIONAL BASES",{x:rx,y:3.14,w:rw,h:0.26,fontFace:SANS_SB,fontSize:9.5,color:ORANGE,charSpacing:1.5,margin:0});
   const bases=[["Anápolis – GO","Largest base outside HQ, supporting fleet availability across the Goiás corridor"],
     ["Brasília – DF","Garagem BSB supporting operations across the Federal District"],
     ["Senador Canedo – GO","Support base close to client sites, enabling faster response times"],
     ["Uberlândia – MG","Serving the Triângulo Mineiro region with strong execution oversight"]];
-  let by=3.44;
-  bases.forEach(([n,d])=>{
-    chip(s, rx, by+0.02, 0.42, "mappin", {fill:PAPER, color:"orange"});
-    s.addText(n, { x:rx+0.6, y:by-0.04, w:rw-0.6, h:0.3, fontFace:SANS_SB, fontSize:11, color:NAVY, margin:0, valign:"top" });
-    s.addText(d, { x:rx+0.6, y:by+0.26, w:rw-0.6, h:0.36, fontFace:SANS, fontSize:8.8, color:GRAY, margin:0, valign:"top", lineSpacingMultiple:0.98 });
-    by+=0.68;
-  });
-  // stat bar bottom
+  let by=3.44; bases.forEach(([n,d])=>{ iconChip(s,rx,by+0.02,0.42,"mappin");
+    s.addText(n,{x:rx+0.6,y:by-0.04,w:rw-0.6,h:0.3,fontFace:SANS_SB,fontSize:11,color:TITLE,valign:"top",margin:0});
+    s.addText(d,{x:rx+0.6,y:by+0.26,w:rw-0.6,h:0.36,fontFace:SANS,fontSize:8.8,color:GRAY,valign:"top",margin:0,lineSpacingMultiple:0.98}); by+=0.68; });
   const sb=[["1","Headquarters"],["10","Operational bases"],["3","States covered"],["373","Vehicles deployed"]];
-  const sy=6.35, sw=(W-2*M)/4;
-  sb.forEach((t,i)=>{
-    const x=M+i*sw;
-    if(i>0) s.addShape(p.ShapeType.line, { x:x, y:sy+0.05, w:0, h:0.55, line:{color:LINE,width:1} });
-    s.addText(t[0], { x:x+0.2, y:sy, w:sw-0.3, h:0.42, fontFace:SERIF_BLK, fontSize:22, color:ORANGE, margin:0, valign:"bottom" });
-    s.addText(t[1], { x:x+0.2, y:sy+0.44, w:sw-0.3, h:0.26, fontFace:SANS, fontSize:9, color:GRAY, margin:0, valign:"top" });
-  });
+  const sy=6.0,sw=(W-2*M)/4;
+  sb.forEach((t,i)=>{ const x=M+i*sw; if(i>0) s.addShape(p.ShapeType.line,{x,y:sy+0.05,w:0,h:0.55,line:{color:LINE,width:1}});
+    s.addText(t[0],{x:x+0.2,y:sy,w:sw-0.3,h:0.42,fontFace:SANS_SB,fontSize:22,color:ORANGE,margin:0,valign:"bottom"});
+    s.addText(t[1],{x:x+0.2,y:sy+0.44,w:sw-0.3,h:0.26,fontFace:SANS,fontSize:9,color:GRAY,margin:0,valign:"top"}); });
 })();
 
-// ============================================================ SLIDE 11 — TECHNOLOGY
-(() => {
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Company Overview", title:"Technology-enabled operations support high reliability",
-    subtitle:"GPS-based telemetry, driver monitoring and operational discipline keep the fleet running reliably",
-    source:"Source: Company. Availability and preventive-maintenance metrics, and scope of in-house maintenance, to be confirmed with management.", page:11 });
-  const groups=[
-    ["GPS TELEMETRY & DRIVER MONITORING", ["sw_ituran","sw_vtraxx"], "activity", "GPS-based tracking and AI-powered driver-fatigue monitoring provide continuous oversight of fleet and drivers across all bases"],
-    ["ERP & MANAGEMENT", ["sw_totvs"], "cpu", "TOTVS Protheus underpins enterprise resource planning and back-office control"],
-    ["FLEET & MAINTENANCE MANAGEMENT", ["sw_truckscontrol","sw_zion","sw_opensystem","sw_monaco"], "tool", "Specialized systems manage maintenance workflows, parts and fleet operations"],
-    ["SAFETY, PPE & INSPECTION", ["sw_sisma","sw_onsafety","sw_checklistfacil"], "shield", "Digital checklists, PPE control and safety management reinforce operational discipline"],
-  ];
-  const gx=M, gw=(W-2*M-0.4)/2;
-  const pos=[[M,2.05],[M+gw+0.4,2.05],[M,4.15],[M+gw+0.4,4.15]];
-  groups.forEach((g,i)=>{
-    const [x,y]=pos[i]; const h=1.9;
-    card(s, x, y, gw, h, {});
-    chip(s, x+0.24, y+0.22, 0.5, g[2], {fill:PAPER, color:"orange"});
-    s.addText(g[0], { x:x+0.86, y:y+0.26, w:gw-1.05, h:0.42, fontFace:SANS_SB, fontSize:10.5, color:NAVY, charSpacing:0.5, valign:"middle", margin:0, lineSpacingMultiple:0.95 });
-    s.addText(g[3], { x:x+0.24, y:y+0.82, w:gw-0.48, h:0.5, fontFace:SANS, fontSize:8.8, color:GRAY, valign:"top", margin:0, lineSpacingMultiple:1.0 });
-    // logo row — capped cell width, centered group (avoids single-logo stretch)
-    const logos=g[1]; const nlg=logos.length;
-    const gapL=0.18, maxCell=1.35;
-    const cellW=Math.min(maxCell,(gw-0.48-gapL*(nlg-1))/nlg);
-    const totalW=cellW*nlg+gapL*(nlg-1);
-    const startX=x+(gw-totalW)/2;
-    logos.forEach((lg,j)=>{
-      const lx=startX+j*(cellW+gapL);
-      s.addImage({ path:A+lg+".png", x:lx, y:y+1.36, w:cellW, h:0.42, sizing:{type:"contain", w:cellW, h:0.42} });
-    });
+// =========================================================== 14 TIMELINE
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Company Overview",title:"A track record built over more than 20 years",
+    subtitle:"Mobi has +20 years of experience in corporate employee transportation",
+    source:"Source: Company. Foundation year and milestone dates to be confirmed with management.",page:14});
+  const nodes=[["[Year TBC]","Foundation of Mobi"],["[Year]","[Milestone — TBC]"],["[Year]","[Milestone — TBC]"],["2025","[Milestone — TBC]"],["2026E","Positioned for continued growth"]];
+  const railY=3.0, x0=M+0.9, x1=W-M-0.9, n=nodes.length, gap=(x1-x0)/(n-1);
+  s.addShape(p.ShapeType.line,{x:x0,y:railY,w:x1-x0,h:0,line:{color:LINE,width:1.5}});
+  nodes.forEach((nd,i)=>{ const cx=x0+i*gap, last=i===n-1;
+    const d=0.9; s.addShape(p.ShapeType.ellipse,{x:cx-d/2,y:railY-d/2,w:d,h:d,fill:{color:last?ORANGE:SLATE},line:{color:WHITE,width:3}});
+    s.addText(nd[0],{x:cx-d/2,y:railY-d/2,w:d,h:d,fontFace:SANS_SB,fontSize:13,color:WHITE,align:"center",valign:"middle",margin:0});
+    // card below
+    const cw=1.85, cx0=cx-cw/2, cyy=railY+0.85;
+    rrect(s,cx0,cyy,cw,1.5,PAPER,{radius:0.08,line:LINE});
+    s.addShape(p.ShapeType.line,{x:cx,y:railY+d/2,w:0,h:0.85-d/2,line:{color:LINE,width:1.5}});
+    s.addText(nd[1],{x:cx0+0.15,y:cyy+0.2,w:cw-0.3,h:1.1,fontFace:SANS_M,fontSize:10,color:TXT,align:"center",valign:"top",margin:0,lineSpacingMultiple:1.05});
   });
+  conclusionBand(s,"More than two decades of disciplined operation, positioned for its next phase of growth",{y:H-0.95,h:0.62});
 })();
 
-// ============================================================ SLIDE 12 — GROWTH AVENUES
-(() => {
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Investment Thesis", title:"Multiple avenues for continued value creation",
-    subtitle:"Geographic expansion, consolidation and fleet electrification position Mobi for a sustained growth trajectory",
-    source:"Source: Company; press research. Growth avenues to be validated with management.", page:12 });
-  const av=[
-    ["A","Deepen wallet share & expand geographically","mappin",
-      ["Well positioned to grow share with existing clients while winning new logos","Expansion within the Goiás–DF–Minas Gerais corridor and selectively into adjacent regions leverages existing bases and relationships"]],
-    ["B","Fleet electrification & tech-enabled services","zap",
-      ["Gradual electrification responds to clients’ ESG and Scope-3 commitments","A technology layer (route optimization, booking apps, carbon dashboards) can further strengthen client stickiness"]],
-    ["C","Consolidate a fragmented market","layers",
-      ["The Brazilian corporate-transportation market remains highly fragmented, with consolidation already underway","Mobi’s scale and track record position it as a natural consolidation platform for smaller regional operators"]],
+// =========================================================== 15 REVENUE / SERVICE MODEL
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Company Overview",title:"A recurring, contract-based revenue model",
+    subtitle:"Revenue is generated through long-term corporate transportation contracts across two operating entities",
+    source:"Source: Company. Revenue split and contract economics to be confirmed with management.",page:15});
+  const cards=[
+    [A+"mobi_microbus.png","Dedicated fleet contracts","Long-term contracts (3–5 years) providing dedicated vehicles, drivers and routes to corporate clients, billed on a recurring monthly basis"],
+    [A+"mobi_fleet2.png","Route & shift management","Employee transportation planned around client shifts and sites, with GPS telemetry and monitoring ensuring reliability and safety"],
+    [A+"mobi_bus_front.png","Two operating entities","Revenue consolidated across AGM Caetano and AGM Alpha, together reaching ~BRL 140 Mn of net revenue in 2025"],
   ];
   const cw=(W-2*M-0.8)/3;
-  av.forEach((a,i)=>{
-    const x=M+i*(cw+0.4), y=2.15, h=4.15;
-    card(s, x, y, cw, h, {});
-    // header band
-    s.addShape(p.ShapeType.roundRect, { x:x, y:y, w:cw, h:1.15, rectRadius:0.1, fill:{color:NAVY}, line:{type:"none"} });
-    s.addShape(p.ShapeType.rect, { x:x, y:y+0.6, w:cw, h:0.55, fill:{color:NAVY} });
-    s.addShape(p.ShapeType.ellipse, { x:x+0.28, y:y+0.28, w:0.6, h:0.6, fill:{color:ORANGE}, line:{type:"none"} });
-    s.addText(a[0], { x:x+0.28, y:y+0.28, w:0.6, h:0.6, fontFace:SERIF_BLK, fontSize:22, color:WHITE, align:"center", valign:"middle", margin:0 });
-    s.addImage({ path:ic(a[2],"white"), x:x+cw-0.86, y:y+0.36, w:0.44, h:0.44 });
-    s.addText(a[1], { x:x+0.28, y:y+1.32, w:cw-0.56, h:0.85, fontFace:SANS_SB, fontSize:13, color:NAVY, valign:"top", margin:0, lineSpacingMultiple:1.0 });
-    let ly=y+2.25;
-    a[3].forEach(pt=>{
-      s.addShape(p.ShapeType.ellipse, { x:x+0.3, y:ly+0.07, w:0.1, h:0.1, fill:{color:ORANGE}, line:{type:"none"} });
-      s.addText(pt, { x:x+0.52, y:ly-0.04, w:cw-0.78, h:0.85, fontFace:SANS, fontSize:9.3, color:GRAY, valign:"top", margin:0, lineSpacingMultiple:1.02 });
-      ly+=0.98;
-    });
+  cards.forEach((c,i)=>{ const x=M+i*(cw+0.4), y=2.5;
+    photoCircle(s,c[0],x+cw/2-1.05,y,2.1,{badge:i+1});
+    rrect(s,x,y+2.35,cw,1.85,PAPER,{radius:0.1,line:LINE});
+    s.addText(c[1],{x:x+0.25,y:y+2.55,w:cw-0.5,h:0.4,fontFace:SANS_SB,fontSize:13,color:TITLE,align:"center",valign:"top",margin:0});
+    s.addText(c[2],{x:x+0.3,y:y+3.0,w:cw-0.6,h:1.1,fontFace:SANS,fontSize:9.5,color:GRAY,align:"center",valign:"top",margin:0,lineSpacingMultiple:1.05});
   });
 })();
 
-// ============================================================ SLIDE 13 — DIVIDER 03
-(() => { divider(p.addSlide(), 2); })();
-
-// ============================================================ SLIDE 14 — TIMELINE
-(() => {
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Company Overview", title:"A track record built over more than 20 years",
-    subtitle:"Mobi has +20 years of experience in corporate employee transportation",
-    source:"Source: Company. Foundation year, milestone dates and revenue evolution to be confirmed with management.", page:14 });
-  // timeline rail
-  const railY=3.15, x0=M+0.2, x1=W-M-0.2;
-  s.addShape(p.ShapeType.line, { x:x0, y:railY, w:x1-x0, h:0, line:{color:LINE, width:2} });
-  const nodes=[["Foundation","[Year TBC]"],["[Milestone]","[Year]"],["[Milestone]","[Year]"],["[Milestone]","[Year]"],["[Milestone]","2025"],["Positioned for growth","2026E"]];
-  const n=nodes.length, gap=(x1-x0)/(n-1);
-  nodes.forEach((nd,i)=>{
-    const cx=x0+i*gap; const last=i===n-1;
-    s.addShape(p.ShapeType.ellipse, { x:cx-0.1, y:railY-0.1, w:0.2, h:0.2, fill:{color:last?ORANGE:NAVY}, line:{color:WHITE, width:2} });
-    const up=i%2===0;
-    // consistent order everywhere: YEAR (bold) then MILESTONE (gray) reading toward the rail
-    const yYear = up ? railY-0.98 : railY+0.22;
-    const yMile = up ? railY-0.64 : railY+0.54;
-    s.addText(nd[1], { x:cx-1.0, y:yYear, w:2.0, h:0.3, fontFace:SANS_SB, fontSize:11, color:ORANGE, align:"center", margin:0 });
-    s.addText(nd[0], { x:cx-1.0, y:yMile, w:2.0, h:0.42, fontFace:SANS, fontSize:9, color:GRAY, align:"center", valign:"top", margin:0, lineSpacingMultiple:0.95 });
-  });
-  // revenue chart area
-  card(s, M, 4.35, W-2*M, 2.05, {fill:PAPER, line:LINE, shadow:false});
-  s.addText("Gross revenue evolution  —  BRL Mn", { x:M+0.3, y:4.5, w:6, h:0.3, fontFace:SANS_SB, fontSize:11, color:NAVY, margin:0 });
-  s.addShape(p.ShapeType.roundRect, { x:W-M-2.0, y:4.48, w:1.7, h:0.4, rectRadius:0.06, fill:{color:"E9EDF2"}, line:{type:"none"} });
-  s.addText("CAGR  [XX]%", { x:W-M-2.0, y:4.48, w:1.7, h:0.4, fontFace:SANS_SB, fontSize:10.5, color:GRAY, align:"center", valign:"middle", margin:0 });
-  s.addText("Revenue history and projection pending Company data", { x:M+0.3, y:5.4, w:W-2*M-0.6, h:0.5, fontFace:SANS, fontSize:11, color:GRAY_L, align:"center", italic:true, valign:"middle" });
-})();
-
-// ============================================================ SLIDE 15 — KEY MANAGEMENT
-(() => {
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Company Overview", title:"An experienced and committed management team",
+// =========================================================== 16 KEY MANAGEMENT
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Company Overview",title:"An experienced and committed management team",
     subtitle:"Management team overview — names, roles and backgrounds to be confirmed with the Company",
-    source:"Source: Company. Roles and backgrounds to be confirmed with management.", page:15 });
+    source:"Source: Company. Roles and backgrounds to be confirmed with management.",page:16});
   const team=[["Antônio Gabriel","AG"],["Morgana","M"],["Pedro","P"],["Gabriela","G"],["[Name TBC]","?"]];
   const n=team.length, gw=(W-2*M-(n-1)*0.4)/n;
-  team.forEach((t,i)=>{
-    const x=M+i*(gw+0.4), y=2.2, h=3.9;
-    card(s, x, y, gw, h, {});
-    s.addShape(p.ShapeType.ellipse, { x:x+gw/2-0.7, y:y+0.35, w:1.4, h:1.4, fill:{color:NAVY}, line:{type:"none"} });
-    s.addText(t[1], { x:x+gw/2-0.7, y:y+0.35, w:1.4, h:1.4, fontFace:SERIF_BLK, fontSize:34, color:WHITE, align:"center", valign:"middle", margin:0 });
-    s.addText(t[0], { x:x+0.1, y:y+1.95, w:gw-0.2, h:0.35, fontFace:SANS_SB, fontSize:12.5, color:NAVY, align:"center", margin:0 });
-    s.addText("[Role — TBC]", { x:x+0.1, y:y+2.3, w:gw-0.2, h:0.3, fontFace:SANS, fontSize:9.5, color:ORANGE, align:"center", margin:0 });
-    s.addShape(p.ShapeType.line, { x:x+0.4, y:y+2.72, w:gw-0.8, h:0, line:{color:LINE, width:1} });
-    s.addText("[Background — to be\nconfirmed with the\nCompany]", { x:x+0.25, y:y+2.85, w:gw-0.5, h:0.9, fontFace:SANS, fontSize:8.8, color:GRAY, align:"center", valign:"top", margin:0, lineSpacingMultiple:1.05 });
+  team.forEach((t,i)=>{ const x=M+i*(gw+0.4), y=2.35, h=3.8;
+    rrect(s,x,y,gw,h,PAPER,{radius:0.12,line:LINE,shadow:true});
+    const d=1.4; s.addShape(p.ShapeType.ellipse,{x:x+gw/2-d/2,y:y+0.35,w:d,h:d,fill:{color:i%2?SLATE:SLATE_D},line:{type:"none"}});
+    s.addText(t[1],{x:x+gw/2-d/2,y:y+0.35,w:d,h:d,fontFace:SANS_SB,fontSize:30,color:WHITE,align:"center",valign:"middle",margin:0});
+    s.addText(t[0],{x:x+0.1,y:y+1.9,w:gw-0.2,h:0.35,fontFace:SANS_SB,fontSize:12,color:TITLE,align:"center",margin:0});
+    s.addText("[Role — TBC]",{x:x+0.1,y:y+2.25,w:gw-0.2,h:0.3,fontFace:SANS_M,fontSize:9.5,color:ORANGE,align:"center",margin:0});
+    s.addShape(p.ShapeType.line,{x:x+0.4,y:y+2.68,w:gw-0.8,h:0,line:{color:LINE,width:1}});
+    s.addText("[Background — to be\nconfirmed with the\nCompany]",{x:x+0.25,y:y+2.82,w:gw-0.5,h:0.9,fontFace:SANS,fontSize:8.6,color:GRAY,align:"center",valign:"top",margin:0,lineSpacingMultiple:1.1});
   });
 })();
 
-// ============================================================ SLIDE 16 — ORG CHART
-(() => {
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Company Overview", title:"Organization & corporate structure",
-    subtitle:"Mobi operates under a multi-entity structure (Grupo AGM Caetano / AGM Alpha) — simplified representation, to be confirmed",
-    source:"Source: Company. Simplified representation; entities and ownership to be confirmed with management.", page:16 });
-  const box=(x,y,w,h,txt,sub,{fill=WHITE,tc=NAVY,line=NAVY}={})=>{
-    s.addShape(p.ShapeType.roundRect, { x,y,w,h, rectRadius:0.06, fill:{color:fill}, line:{color:line,width:1.25} });
-    s.addText(txt, { x:x+0.1, y:sub?y+0.08:y, w:w-0.2, h:sub?0.32:h, fontFace:SANS_SB, fontSize:10.5, color:tc, align:"center", valign:sub?"top":"middle", margin:0 });
-    if(sub) s.addText(sub, { x:x+0.1, y:y+0.36, w:w-0.2, h:h-0.4, fontFace:SANS, fontSize:8, color: fill===NAVY?"C4CCD6":GRAY, align:"center", valign:"top", margin:0 });
+// =========================================================== 17 CORPORATE STRUCTURE
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Company Overview",title:"Organization & corporate structure",
+    subtitle:"Multi-entity structure (Grupo AGM Caetano / AGM Alpha) — simplified representation, to be confirmed",
+    source:"Source: Company. Simplified representation; entities and ownership to be confirmed with management.",page:17});
+  const box=(x,y,w,h,txt,sub,{fill=WHITE,tc=TITLE,line=SLATE}={})=>{
+    rrect(s,x,y,w,h,fill,{radius:0.07,line});
+    s.addText(txt,{x:x+0.1,y:sub?y+0.1:y,w:w-0.2,h:sub?0.34:h,fontFace:SANS_SB,fontSize:11,color:tc,align:"center",valign:sub?"top":"middle",margin:0});
+    if(sub) s.addText(sub,{x:x+0.1,y:y+0.4,w:w-0.2,h:h-0.44,fontFace:SANS,fontSize:8,color:fill===SLATE_D?POWDER:GRAY,align:"center",valign:"top",margin:0});
   };
   const conn=(x1,y1,x2,y2)=>s.addShape(p.ShapeType.line,{x:Math.min(x1,x2),y:Math.min(y1,y2),w:Math.abs(x2-x1),h:Math.abs(y2-y1),line:{color:GRAY_L,width:1}});
-  // shareholders
-  box(W/2-1.6,2.05,3.2,0.55,"Family Shareholders",null,{fill:ORANGE,tc:WHITE,line:ORANGE});
-  conn(W/2,2.6,W/2,2.95);
-  // holding
-  box(W/2-1.9,2.95,3.8,0.7,"AGM Caetano Participações","Holding company",{fill:NAVY,tc:WHITE,line:NAVY});
-  // level 3 - three entities
+  box(W/2-1.6,2.1,3.2,0.55,"Family Shareholders",null,{fill:ORANGE,tc:WHITE,line:ORANGE});
+  conn(W/2,2.65,W/2,3.0);
+  box(W/2-1.95,3.0,3.9,0.72,"AGM Caetano Participações","Holding company",{fill:SLATE_D,tc:WHITE,line:SLATE_D});
   const l3=[["AGM Caetano LTDA","Operating entity"],["MOBI Alpha","Matriz Brasília"],["Moura e Carrilho Part.","[Related party]"]];
-  const bw=3.5, tot=3*bw+2*0.55, sx=W/2-tot/2, ly=4.15;
-  conn(W/2,3.65,W/2,3.9); s.addShape(p.ShapeType.line,{x:sx+bw/2,y:3.9,w:tot-bw,h:0,line:{color:GRAY_L,width:1}});
-  l3.forEach((b,i)=>{ const x=sx+i*(bw+0.55); conn(x+bw/2,3.9,x+bw/2,ly); box(x,ly,bw,0.7,b[0],b[1]); });
-  // filiais under first
-  s.addText("OPERATIONAL BRANCHES (FILIAIS)", { x:M, y:5.35, w:6, h:0.26, fontFace:SANS_SB, fontSize:9.5, color:ORANGE, charSpacing:1 });
+  const bw=3.5,tot=3*bw+2*0.55,sx=W/2-tot/2,ly=4.25;
+  conn(W/2,3.72,W/2,4.0); s.addShape(p.ShapeType.line,{x:sx+bw/2,y:4.0,w:tot-bw,h:0,line:{color:GRAY_L,width:1}});
+  l3.forEach((b,i)=>{ const x=sx+i*(bw+0.55); conn(x+bw/2,4.0,x+bw/2,ly); box(x,ly,bw,0.72,b[0],b[1]); });
+  s.addText("OPERATIONAL BRANCHES (FILIAIS)",{x:M,y:5.45,w:6,h:0.26,fontFace:SANS_SB,fontSize:9.5,color:ORANGE,charSpacing:1,margin:0});
   const fil=["Goiânia","Anápolis","Nerópolis","Senador Canedo","Itumbiara","Alexânia","Uberlândia","Rio Verde","Pires do Rio"];
-  const fcols=5, fw=(W-2*M-(fcols-1)*0.2)/fcols;
-  fil.forEach((f,i)=>{ const x=M+(i%fcols)*(fw+0.2), y=5.68+Math.floor(i/fcols)*0.5;
-    s.addShape(p.ShapeType.roundRect,{x,y,w:fw,h:0.4,rectRadius:0.05,fill:{color:PAPER},line:{color:LINE,width:1}});
-    s.addText("Filial "+f,{x:x+0.05,y,w:fw-0.1,h:0.4,fontFace:SANS_M,fontSize:8.5,color:TXT,align:"center",valign:"middle",margin:0}); });
-  // total fleet badge (top-right, clear of the filiais row)
-  s.addShape(p.ShapeType.roundRect,{x:W-M-2.5,y:2.12,w:2.5,h:0.62,rectRadius:0.08,fill:{color:ORANGE},line:{type:"none"}});
-  s.addText([{text:"Total fleet   ",options:{color:"FBE0D3",fontFace:SANS}},{text:"373",options:{color:WHITE,fontFace:SANS_SB,fontSize:14}}],{x:W-M-2.5,y:2.12,w:2.5,h:0.62,fontSize:11,align:"center",valign:"middle",margin:0});
+  const fcols=5,fw=(W-2*M-(fcols-1)*0.2)/fcols;
+  fil.forEach((f,i)=>{ const x=M+(i%fcols)*(fw+0.2), y=5.78+Math.floor(i/fcols)*0.5;
+    rrect(s,x,y,fw,0.4,POWDER_L,{radius:0.05,line:LINE}); s.addText("Filial "+f,{x:x+0.05,y,w:fw-0.1,h:0.4,fontFace:SANS_M,fontSize:8.5,color:TXT,align:"center",valign:"middle",margin:0}); });
+  rrect(s,W-M-2.5,2.15,2.5,0.62,ORANGE,{radius:0.08});
+  s.addText([{text:"Total fleet   ",options:{color:"FBE0D3",fontFace:SANS}},{text:"373",options:{color:WHITE,fontFace:SANS_SB,fontSize:14}}],{x:W-M-2.5,y:2.15,w:2.5,h:0.62,fontSize:11,align:"center",valign:"middle",margin:0});
 })();
 
-// ============================================================ SLIDES 17-19 — SUCCESS CASES
-function successCase(page, client, logo, valLabel){
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Company Overview", title:`Success case: ${client}`,
-    subtitle:"Long-term relationship example — details to be confirmed with the Company",
-    source:"Source: Company — to be confirmed with management.", page });
-  // client logo card
-  card(s, M, 2.15, 3.0, 1.5, {fill:WHITE, line:LINE, shadow:true});
-  s.addImage({ path:A+logo+".png", x:M+0.4, y:2.45, w:2.2, h:0.9, sizing:{type:"contain", w:2.2, h:0.9} });
-  s.addText("[City — State]", { x:M, y:3.75, w:3.0, h:0.3, fontFace:SANS_M, fontSize:10, color:GRAY, align:"center" });
-  // two stat blocks: start vs current
-  const blocks=[["Start of contract","BRL [XXX]k","[X] months","[Service scope — TBC]"],["Current contract","BRL [XXX] Mn","[X] years","[Service scope — TBC]"]];
-  const bx=3.75, bw=(W-bx-M-0.4)/2;
-  blocks.forEach((b,i)=>{
-    const x=bx+i*(bw+0.4), y=2.15, h=1.9;
-    card(s, x, y, bw, h, {fill:i?NAVY:PAPER, line:i?null:LINE, shadow:i>0});
-    const tc=i?WHITE:NAVY, sc=i?"C4CCD6":GRAY, ac=ORANGE;
-    s.addText(b[0].toUpperCase(), { x:x+0.28, y:y+0.2, w:bw-0.56, h:0.3, fontFace:SANS_SB, fontSize:9.5, color:ac, charSpacing:1, margin:0 });
-    s.addText(b[1], { x:x+0.28, y:y+0.55, w:(bw-0.56)/2, h:0.4, fontFace:SERIF_BLK, fontSize:19, color:tc, margin:0, valign:"middle" });
-    s.addText("total value", { x:x+0.28, y:y+0.95, w:(bw-0.56)/2, h:0.25, fontFace:SANS, fontSize:8, color:sc, margin:0 });
-    s.addText(b[2], { x:x+0.28+(bw-0.56)/2, y:y+0.55, w:(bw-0.56)/2, h:0.4, fontFace:SERIF_BLK, fontSize:19, color:tc, margin:0, valign:"middle" });
-    s.addText("total term", { x:x+0.28+(bw-0.56)/2, y:y+0.95, w:(bw-0.56)/2, h:0.25, fontFace:SANS, fontSize:8, color:sc, margin:0 });
-    s.addText(b[3], { x:x+0.28, y:y+1.32, w:bw-0.56, h:0.45, fontFace:SANS, fontSize:9, color:sc, margin:0, valign:"top" });
+// =========================================================== 18 SUCCESS CASES
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Company Overview",title:"Long-standing relationships with anchor clients",
+    subtitle:"Selected success cases illustrating Mobi’s durable, multi-year client partnerships — details to be confirmed",
+    source:"Source: Company — to be confirmed with management.",page:18});
+  const cases=[["cli_cargill","Cargill"],["cli_jbs","JBS"],["cli_votorantim","Votorantim Cimentos"]];
+  const cw=(W-2*M-0.8)/3;
+  cases.forEach((c,i)=>{ const x=M+i*(cw+0.4), y=2.2, h=4.15;
+    rrect(s,x,y,cw,h,PAPER,{radius:0.12,line:LINE,shadow:true});
+    rrect(s,x+0.3,y+0.35,cw-0.6,1.1,WHITE,{radius:0.08,line:LINE});
+    s.addImage({path:A+c[0]+".png",x:x+0.6,y:y+0.6,w:cw-1.2,h:0.6,sizing:{type:"contain",w:cw-1.2,h:0.6}});
+    s.addText("[City — State]",{x:x+0.2,y:y+1.55,w:cw-0.4,h:0.3,fontFace:SANS_M,fontSize:9.5,color:GRAY,align:"center",margin:0});
+    // two stats
+    const sy=y+2.0, sw=(cw-0.6)/2;
+    [["BRL [XXX] Mn","total value"],["[X] years","total term"]].forEach((t,j)=>{ const sx=x+0.3+j*sw;
+      s.addText(t[0],{x:sx,y:sy,w:sw,h:0.4,fontFace:SANS_SB,fontSize:15,color:ORANGE,align:"center",valign:"middle",margin:0});
+      s.addText(t[1],{x:sx,y:sy+0.4,w:sw,h:0.26,fontFace:SANS,fontSize:8.5,color:GRAY,align:"center",valign:"top",margin:0}); });
+    s.addShape(p.ShapeType.line,{x:x+0.4,y:sy+0.8,w:cw-0.8,h:0,line:{color:LINE,width:1}});
+    s.addText("[Service scope — TBC]",{x:x+0.3,y:sy+0.95,w:cw-0.6,h:0.35,fontFace:SANS_M,fontSize:9.5,color:TITLE,align:"center",margin:0});
+    s.addText("[Relationship highlights and milestones to be confirmed with the Company]",{x:x+0.3,y:sy+1.3,w:cw-0.6,h:0.6,fontFace:SANS,fontSize:8.5,color:GRAY,align:"center",valign:"top",margin:0,lineSpacingMultiple:1.05});
   });
-  // timeline bottom
-  s.addText("TIMELINE", { x:M, y:4.45, w:4, h:0.26, fontFace:SANS_SB, fontSize:10, color:ORANGE, charSpacing:1.5 });
-  const railY=5.25, x0=M+0.3, x1=W-M-0.3;
-  s.addShape(p.ShapeType.line, { x:x0, y:railY, w:x1-x0, h:0, line:{color:LINE, width:2} });
-  const nn=4, gap=(x1-x0)/(nn-1);
-  for(let i=0;i<nn;i++){ const cx=x0+i*gap;
-    s.addShape(p.ShapeType.ellipse, { x:cx-0.09, y:railY-0.09, w:0.18, h:0.18, fill:{color:NAVY}, line:{color:WHITE,width:2} });
-    s.addText("[Mon-YY]", { x:cx-0.9, y:railY-0.5, w:1.8, h:0.28, fontFace:SANS_SB, fontSize:9.5, color:NAVY, align:"center", margin:0 });
-    s.addText("[Milestone — TBC]", { x:cx-0.9, y:railY+0.18, w:1.8, h:0.4, fontFace:SANS, fontSize:8.5, color:GRAY, align:"center", margin:0, valign:"top" });
-  }
-}
-successCase(17, "Cargill operation", "cli_cargill");
-successCase(18, "JBS operation", "cli_jbs");
-successCase(19, "Votorantim Cimentos operation", "cli_votorantim");
+})();
 
-// ============================================================ SLIDE 20 — DIVIDER 04
-(() => { divider(p.addSlide(), 3); })();
+// =========================================================== 19 TOC 04
+tocSlide(3);
 
-// ============================================================ SLIDE 21 — FINANCIAL HIGHLIGHTS
-(() => {
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Financial Highlights", title:"Financial highlights",
+// =========================================================== 20 FINANCIAL HIGHLIGHTS
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Financial Highlights",title:"Financial highlights",
     subtitle:"Solid profitability in 2025; full historical series and projections pending Company data",
-    source:"Source: Company. 2025 figures are approximate and preliminary; historical series and projections to be confirmed with management.", page:21 });
-  // 2025 known stats row
-  const tiles=[["~BRL 140 Mn","Net revenue 2025",ORANGE],["~BRL 36 Mn","EBITDA 2025",ORANGE],["~26%","EBITDA margin 2025",ORANGE],["+41.3%","1Q gross revenue YoY",ORANGE]];
+    source:"Source: Company. 2025 figures are approximate and preliminary; historical series and projections to be confirmed with management.",page:20});
+  const tiles=[["~BRL 140 Mn","Net revenue 2025"],["~BRL 36 Mn","EBITDA 2025"],["~26%","EBITDA margin 2025"],["+41.3%","1Q gross revenue YoY"]];
   const tw=(W-2*M-3*0.3)/4;
-  tiles.forEach((t,i)=>{ const x=M+i*(tw+0.3), y=2.05, h=1.2;
-    card(s, x, y, tw, h, {fill:PAPER, line:LINE, shadow:false});
-    s.addText(t[0], { x:x+0.22, y:y+0.16, w:tw-0.44, h:0.5, fontFace:SERIF_BLK, fontSize:22, color:t[2], margin:0, valign:"middle" });
-    s.addText(t[1], { x:x+0.22, y:y+0.72, w:tw-0.44, h:0.32, fontFace:SANS, fontSize:9.5, color:GRAY, margin:0, valign:"top" });
-  });
-  // chart placeholder (revenue & EBITDA) with 2025 anchored
-  card(s, M, 3.5, W-2*M, 2.9, {fill:WHITE, line:LINE, shadow:true});
-  s.addText("Net revenue & EBITDA evolution  —  BRL Mn", { x:M+0.3, y:3.66, w:8, h:0.3, fontFace:SANS_SB, fontSize:12, color:NAVY, margin:0 });
-  // legend
-  s.addShape(p.ShapeType.rect,{x:W-M-3.0,y:3.72,w:0.18,h:0.18,fill:{color:NAVY2}}); s.addText("Net revenue",{x:W-M-2.78,y:3.66,w:1.1,h:0.28,fontFace:SANS,fontSize:9,color:GRAY,valign:"middle",margin:0});
-  s.addShape(p.ShapeType.rect,{x:W-M-1.6,y:3.72,w:0.18,h:0.18,fill:{color:ORANGE}}); s.addText("EBITDA",{x:W-M-1.38,y:3.66,w:1.1,h:0.28,fontFace:SANS,fontSize:9,color:GRAY,valign:"middle",margin:0});
-  s.addChart(p.ChartType.bar, [
-    { name:"Net revenue", labels:["2022","2023","2024","2025","2026E"], values:[null,null,null,140,null] },
-    { name:"EBITDA", labels:["2022","2023","2024","2025","2026E"], values:[null,null,null,36,null] },
-  ], { x:M+0.2, y:4.1, w:W-2*M-0.5, h:2.15, barDir:"col", barGrouping:"clustered",
-       chartColors:[NAVY2, ORANGE], showLegend:false,
-       showValue:true, dataLabelFontFace:SANS_SB, dataLabelFontSize:10, dataLabelColor:NAVY, dataLabelPosition:"outEnd",
-       catAxisLabelFontFace:SANS_M, catAxisLabelFontSize:10, catAxisLabelColor:TXT, catGridLine:{style:"none"},
-       valAxisHidden:true, valGridLine:{style:"none"}, valAxisMaxVal:170, barGapWidthPct:70 });
-  s.addText("2022–2024 and 2026E\nfigures pending Company data", { x:M+0.55, y:4.75, w:3.6, h:0.7, fontFace:SANS, fontSize:10, color:GRAY_L, italic:true, align:"left", valign:"top", lineSpacingMultiple:1.05 });
+  tiles.forEach((t,i)=>{ const x=M+i*(tw+0.3), y=2.05, h=1.15;
+    rrect(s,x,y,tw,h,PAPER,{radius:0.09,line:LINE});
+    s.addText(t[0],{x:x+0.22,y:y+0.16,w:tw-0.44,h:0.5,fontFace:SANS_SB,fontSize:21,color:ORANGE,margin:0,valign:"middle"});
+    s.addText(t[1],{x:x+0.22,y:y+0.7,w:tw-0.44,h:0.32,fontFace:SANS,fontSize:9.5,color:GRAY,margin:0,valign:"top"}); });
+  rrect(s,M,3.5,W-2*M,2.9,WHITE,{radius:0.1,line:LINE,shadow:true});
+  s.addText("Net revenue & EBITDA evolution — BRL Mn",{x:M+0.3,y:3.66,w:8,h:0.3,fontFace:SANS_SB,fontSize:12,color:TITLE,margin:0});
+  s.addShape(p.ShapeType.rect,{x:W-M-3.0,y:3.72,w:0.18,h:0.18,fill:{color:CHART_LT}}); s.addText("Net revenue",{x:W-M-2.78,y:3.66,w:1.1,h:0.28,fontFace:SANS,fontSize:9,color:GRAY,valign:"middle",margin:0});
+  s.addShape(p.ShapeType.rect,{x:W-M-1.6,y:3.72,w:0.18,h:0.18,fill:{color:SLATE}}); s.addText("EBITDA",{x:W-M-1.38,y:3.66,w:1.1,h:0.28,fontFace:SANS,fontSize:9,color:GRAY,valign:"middle",margin:0});
+  colChart(s,p.ChartType.bar,[
+    {name:"Net revenue",labels:["2022","2023","2024","2025","2026E"],values:[null,null,null,140,null]},
+    {name:"EBITDA",labels:["2022","2023","2024","2025","2026E"],values:[null,null,null,36,null]},
+  ],M+0.2,4.1,W-2*M-0.5,2.15,{barGrouping:"clustered",chartColors:[CHART_LT,SLATE],valAxisMaxVal:170,barGapWidthPct:70,catAxisLabelFontSize:10,catAxisLabelColor:TXT});
+  s.addText("2022–2024 and 2026E\nfigures pending Company data",{x:M+0.55,y:4.75,w:3.6,h:0.7,fontFace:SANS,fontSize:10,color:GRAY_L,italic:true,align:"left",valign:"top",margin:0,lineSpacingMultiple:1.05});
 })();
 
-// ============================================================ SLIDE 22 — CASH & GROWTH VECTORS
-(() => {
-  const s = p.addSlide(); bg(s, WHITE);
-  chrome(s, { eyebrow:"Financial Highlights", title:"Cash generation & value drivers",
-    subtitle:"A capital-efficient, contracted model — detailed metrics to be confirmed with the Company",
-    source:"Source: Company. Framework for discussion; all figures to be confirmed with management.", page:22 });
-  const cards=[
-    ["repeat","Contracted revenue base","Long-term contracts (3–5 years) with annual price adjustments (IPCA, CBA, diesel pass-through) provide strong revenue visibility and margin protection","[XXX] backlog"],
-    ["dollar","Healthy profitability","~26% EBITDA margin in 2025, underpinned by scale, fleet ownership and operational discipline","~BRL 36 Mn EBITDA"],
-    ["truck","Asset-backed balance sheet","A fully-owned fleet of 373 vehicles (~BRL 198 Mn value) supports financing flexibility and residual-value optionality","100% owned"],
-    ["trendup","Reinvestment for growth","Capex directed at fleet renewal and expansion; capital-allocation profile to be detailed with management","Capex profile [TBC]"],
+// =========================================================== 21 P&L TABLE
+(()=>{ const s=p.addSlide(); bg(s,WHITE);
+  chrome(s,{eyebrow:"Financial Highlights",title:"Consolidated income statement",
+    subtitle:"Combined figures for AGM Caetano and AGM Alpha — full series to be confirmed with the Company",
+    source:"Source: Company. Illustrative structure; all figures to be confirmed with management. Net revenue and EBITDA for 2025 are approximate.",page:21});
+  const cols=["BRL Mn","2022","2023","2024","2025","2026E"];
+  const rows=[
+    ["Gross revenue","—","—","—","—","—","h"],
+    ["Taxes","—","—","—","—","—",""],
+    ["Net revenue","—","—","—","~140","—","b"],
+    ["growth %","—","—","—","—","—","i"],
+    ["COGS","—","—","—","—","—",""],
+    ["Gross profit","—","—","—","—","—","h"],
+    ["gross margin %","—","—","—","—","—","i"],
+    ["Personnel expenses","—","—","—","—","—",""],
+    ["General & administrative","—","—","—","—","—",""],
+    ["Selling expenses","—","—","—","—","—",""],
+    ["EBITDA","—","—","—","~36","—","b"],
+    ["EBITDA margin %","—","—","—","~26%","—","i"],
+    ["D&A","—","—","—","—","—",""],
+    ["Financial result","—","—","—","—","—",""],
+    ["EBT","—","—","—","—","—","h"],
+    ["Net income","—","—","—","—","—","b"],
   ];
-  const cw=(W-2*M-0.4)/2;
-  cards.forEach((c,i)=>{ const x=M+(i%2)*(cw+0.4), y=2.15+Math.floor(i/2)*2.1, h=1.9;
-    card(s, x, y, cw, h, {});
-    chip(s, x+0.26, y+0.26, 0.62, c[0], {fill:PAPER, color:"orange"});
-    s.addText(c[1], { x:x+1.05, y:y+0.28, w:cw-2.4, h:0.5, fontFace:SANS_SB, fontSize:13, color:NAVY, valign:"top", margin:0 });
-    s.addShape(p.ShapeType.roundRect, { x:x+cw-1.35, y:y+0.28, w:1.1, h:0.42, rectRadius:0.06, fill:{color:"FDE7DD"}, line:{type:"none"} });
-    s.addText(c[3], { x:x+cw-1.35, y:y+0.28, w:1.1, h:0.42, fontFace:SANS_SB, fontSize:8.5, color:ORANGE_D, align:"center", valign:"middle", margin:0 });
-    s.addText(c[2], { x:x+0.28, y:y+1.02, w:cw-0.56, h:0.75, fontFace:SANS, fontSize:9.5, color:GRAY, valign:"top", margin:0, lineSpacingMultiple:1.02 });
+  const tx=M, tw=W-2*M, ty=2.0, colLabW=3.6, dataW=(tw-colLabW)/(cols.length-1), rh=0.278;
+  // header
+  rect(s,tx,ty,tw,0.38,SLATE_D);
+  s.addText(cols[0],{x:tx+0.2,y:ty,w:colLabW-0.2,h:0.38,fontFace:SANS_SB,fontSize:10.5,color:WHITE,valign:"middle",margin:0});
+  for(let c=1;c<cols.length;c++) s.addText(cols[c],{x:tx+colLabW+(c-1)*dataW,y:ty,w:dataW,h:0.38,fontFace:SANS_SB,fontSize:10.5,color:WHITE,align:"center",valign:"middle",margin:0});
+  let y=ty+0.38;
+  rows.forEach((r,ri)=>{ const kind=r[6];
+    if(kind==="h"||kind==="b") rect(s,tx,y,tw,rh,POWDER_L2);
+    else if(ri%2===1) rect(s,tx,y,tw,rh,PAPER);
+    const bold=(kind==="h"||kind==="b"), ital=(kind==="i");
+    s.addText(r[0],{x:tx+0.2,y,w:colLabW-0.2,h:rh,fontFace:bold?SANS_SB:SANS,fontSize:9.5,italic:ital,color:ital?SLATE:TXT,valign:"middle",margin:0});
+    for(let c=1;c<cols.length;c++){ const v=r[c]; const hot=(typeof v==="string"&&v.indexOf("~")>=0);
+      s.addText(v,{x:tx+colLabW+(c-1)*dataW,y,w:dataW,h:rh,fontFace:bold?SANS_SB:SANS,fontSize:9.5,italic:ital,color:hot?ORANGE:(ital?SLATE:TXT),align:"center",valign:"middle",margin:0}); }
+    y+=rh;
   });
 })();
 
-// ============================================================ SLIDE 23 — BACK COVER
-(() => {
-  const s = p.addSlide(); bg(s, NAVY);
-  s.addShape(p.ShapeType.rect, { x:0, y:0, w:W, h:H, fill:{color:NAVY} });
-  s.addText("Compass", { x:4.6, y:0.35, w:W-0.35-4.6, h:1.6, fontFace:SERIF_BLK, fontSize:56, color:NAVY2, align:"right", valign:"middle", margin:0 });
-  s.addImage({ path:A+"mobi_logo_black.png", x:M, y:0.7, w:2.2, h:2.2*(246/768) });
-  s.addText("Deal team", { x:M, y:2.1, w:8, h:0.6, fontFace:SERIF_SB, fontSize:30, color:WHITE });
-  s.addShape(p.ShapeType.rect, { x:M+0.02, y:2.95, w:0.9, h:0.05, fill:{color:ORANGE} });
-  const team=[["Bruno Iervolino","bruno.iervolino@igcp.com.br","+55 11 3815-3533"],
-              ["Gabriel Brito","gabriel.brito@igcp.com.br","+55 11 3815-3533"],
-              ["[Team member — TBC]","[email — TBC]","+55 11 3815-3533"]];
-  const cw=(W-2*M-2*0.4)/3;
-  team.forEach((t,i)=>{ const x=M+i*(cw+0.4), y=3.4;
-    s.addShape(p.ShapeType.roundRect, { x, y, w:cw, h:1.7, rectRadius:0.1, fill:{color:NAVY2}, line:{type:"none"} });
-    s.addText(t[0], { x:x+0.3, y:y+0.28, w:cw-0.6, h:0.4, fontFace:SERIF_SB, fontSize:15, color:WHITE, margin:0 });
-    s.addText(t[1], { x:x+0.3, y:y+0.78, w:cw-0.6, h:0.3, fontFace:SANS, fontSize:10, color:ORANGE, margin:0 });
-    s.addText(t[2], { x:x+0.3, y:y+1.12, w:cw-0.6, h:0.3, fontFace:SANS, fontSize:10, color:"C4CCD6", margin:0 });
-  });
-  // address + igc
-  s.addImage({ path:A+"igc_white.png", x:M, y:H-1.35, w:0.85, h:0.85*(778/900) });
-  s.addText([
-    {text:"Av. Brigadeiro Faria Lima, 2277 – 6th floor", options:{breakLine:true}},
-    {text:"São Paulo, SP, Brazil – 01452-000", options:{breakLine:true}},
-    {text:"+55 11 3815-3533", options:{}},
-  ], { x:M+1.15, y:H-1.35, w:6, h:0.9, fontFace:SANS, fontSize:10.5, color:"C4CCD6", valign:"middle", lineSpacingMultiple:1.2 });
-  s.addText("Confidential Information Memorandum", { x:W-5.0, y:H-0.7, w:4.45, h:0.3, fontFace:SANS_M, fontSize:10, color:GRAY_L, align:"right" });
+// =========================================================== 22 BACK COVER
+(()=>{ const s=p.addSlide(); bg(s,POWDER);
+  const d=6.4; s.addShape(p.ShapeType.ellipse,{x:-1.6,y:H/2-d/2,w:d,h:d,fill:{color:WHITE},line:{type:"none"},shadow:{type:"outer",color:"9FB2C6",opacity:0.4,blur:14,offset:3,angle:90}});
+  s.addImage({path:A+"cover_buses.jpeg",x:-1.6+0.12,y:H/2-d/2+0.12,w:d-0.24,h:d-0.24,rounding:true,sizing:{type:"cover",w:d-0.24,h:d-0.24}});
+  s.addImage({path:A+"mobi_logo_navy.png",x:W-M-1.6,y:0.5,w:1.6,h:1.6*MOBI_AR});
+  s.addText("Deal team",{x:6.9,y:1.5,w:5.8,h:0.6,fontFace:SANS_SB,fontSize:26,color:SLATE_D,margin:0});
+  const team=[["Bruno Iervolino","bruno.iervolino@igcp.com.br"],["Gabriel Brito","gabriel.brito@igcp.com.br"],["[Team member — TBC]","[email — TBC]"]];
+  let y=2.4; team.forEach(t=>{ s.addText(t[0],{x:6.9,y,w:6,h:0.32,fontFace:SANS_SB,fontSize:14,color:SLATE_D,margin:0});
+    s.addText(t[1],{x:6.9,y:y+0.32,w:6,h:0.28,fontFace:SANS,fontSize:10.5,color:ORANGE,margin:0});
+    s.addText("+55 11 3815-3533",{x:6.9,y:y+0.62,w:6,h:0.28,fontFace:SANS,fontSize:10.5,color:GRAY,margin:0}); y+=1.15; });
+  s.addText([{text:"Av. Brigadeiro Faria Lima, 2277 – 6th floor",options:{breakLine:true}},{text:"01452-000, Jardim Paulistano, São Paulo – SP",options:{breakLine:true}},{text:"+55 11 3815-3533",options:{}}],
+    {x:6.9,y:H-1.15,w:6,h:0.9,fontFace:SANS,fontSize:9.5,color:GRAY,valign:"top",lineSpacingMultiple:1.2,margin:0});
+  s.addImage({path:A+"igc_navy.png",x:M,y:H-0.85,w:0.55,h:0.55*IGC_AR});
 })();
 
-p.writeFile({ fileName:"Project_Compass_CIM.pptx" }).then(f=>console.log("WROTE", f));
+p.writeFile({fileName:"Project_Compass_CIM.pptx"}).then(f=>console.log("WROTE",f));
