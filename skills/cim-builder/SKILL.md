@@ -14,6 +14,27 @@ redescobrir a grade tipográfica nem as margens: elas já estão codificadas em
 
 ---
 
+## Onde isto roda
+
+O deck é **gerado por código** (pptxgenjs) e revisado renderizando as páginas em imagem.
+Portanto esta skill precisa de um ambiente onde dê para executar comandos — Claude Code
+(terminal, web, desktop) ou Cowork. Num chat sem execução de código ela não funciona: o
+`.pptx` não sai.
+
+Antes do primeiro build em cada projeto novo:
+
+```bash
+bash scripts/preflight.sh          # ou: bash scripts/preflight.sh /caminho/do/projeto
+```
+
+Ele confere e, quando possível, instala: node + `pptxgenjs`, as fontes **Poppins**
+(empacotadas em `assets/fonts/`), LibreOffice, poppler e PIL. Sai com erro se faltar algo
+que comprometa o resultado.
+
+A fonte é a dependência traiçoeira: sem Poppins o LibreOffice **substitui em silêncio** e o
+deck sai com outra cara, sem nenhum aviso. Por isso o preflight trata isso como bloqueante,
+não como aviso.
+
 ## A regra que governa tudo o resto
 
 **Cada CIM veste a identidade da empresa-alvo — não existe paleta fixa da IGC.**
@@ -32,6 +53,8 @@ Se o site estiver inacessível, o logo e as fotos da operação carregam a mesma
 use-os e diga ao usuário de onde veio a paleta, para ele poder corrigir.
 
 ## Fluxo
+
+**0. Rode o preflight** (`bash scripts/preflight.sh`) se ainda não rodou neste projeto.
 
 **1. Inventarie o conteúdo antes de desenhar.** Leia tudo que existe — teaser, materiais da
 empresa, CIM anterior, planilhas — e separe explicitamente o que é **dado** do que é **TBC**.
@@ -105,7 +128,9 @@ muito mais caro do que um espaço em branco.
 | `references/disclaimer.txt` | no slide 2, verbatim |
 | `assets/thumbs/` | contact sheets das seis referências — olhe antes de desenhar |
 | `scripts/igc_deck.js` | o kit de construção |
+| `scripts/preflight.sh` | uma vez por projeto, antes do primeiro build |
 | `scripts/qa_deck.py` | depois de cada build |
+| `assets/fonts/` | Poppins empacotada, instalada pelo preflight |
 | `scripts/extract_tokens.py` | para extrair tokens de um `.pptx` de referência novo |
 
 ## Incorporando uma referência nova
@@ -114,9 +139,3 @@ Quando aparecer um CIM novo que valha a pena absorver, prefira o `.pptx` ao PDF 
 achata cor, fonte e geometria exatas. `python3 scripts/extract_tokens.py novo.pptx` reporta
 paleta, fontes, escala, margens e raios; compare com `design-tokens.md` e registre o
 vocabulário de layout em `layout-vocabulary.md`.
-
-## Fontes
-
-O par da casa é **Poppins** (Light / Medium / SemiBold) para UI e corpo, e **Source Serif
-Pro** para display. Se Poppins não estiver instalado o LibreOffice substitui em silêncio e
-o deck sai com outra cara — confira antes de renderizar (`fc-list | grep -i poppins`).
