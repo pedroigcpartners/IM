@@ -49,6 +49,17 @@ Sampled from official logo + fleet livery (site mobitransporte.com.br unreachabl
 
 ## 2. Layout patterns imported per reference
 
+- **Soul (Almatia — the richest reference, 29 slides):** TOC as white panel + giant brand-glyph
+  watermark + full-height person photo, section items with pill page numbers, active in accent —
+  repeated 4× through the deck; **series template** — one layout repeated per segment with a dark
+  left rail listing all segments and the active one highlighted (used 4× for portfolio, 4× for
+  product breakdown — the pattern for any "N segments, same anatomy" content); at-a-glance as
+  4 text quadrants + dark financial side panel + mini-chart row; supplier/partner matrix as a
+  full-width table on dark; footprint as full-bleed photos + dark bottom stat band; growth avenues
+  as numbered circles on a dotted path; ESG 3-column with letter badges; year-column timeline with
+  logo chips; shareholder cards with % badges; back cover = logo lockup + team photo + contact
+  columns. Signature motifs: teardrop/blob shapes (52×), rounded-corner photo frames, brand glyph
+  as watermark.
 - **Lox:** dark full-bleed TOC (display headline + arrow items + page numbers, active in accent);
   timeline as solid accent year-cards grid; DRE dark-header table; footer color band; unit-detail pages
   with accent label pills; covers = photo 2/3 + brand field 1/3 with framed project name.
