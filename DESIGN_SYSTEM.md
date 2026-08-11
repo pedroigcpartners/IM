@@ -1,71 +1,77 @@
 # IGC Partners — Information Memorandum Design System
 
-Extracted from 3 reference decks: `Project_Soul` (Almatia, chemicals, Colombia — polished/real),
-`Projeto_Biocap` (cosmetics, Brazil — polished/real), `Project_Gold_Mine` (Infrabrasil, mining — master template w/ placeholders).
+Extracted from 5 reference decks: `Project_Soul` (Almatia, chemicals), `Projeto_Biocap` (cosmetics),
+`Project_Gold_Mine` (master template), **`Biscoitê/Bluebird`** (premium biscuits), **`Projeto_Lox`** (Z Deli, delis),
+**`Project_Alquimia`** (Galena, nutraceuticals).
 
-## 1. Color system
+## 0. META-PATTERN (the most important rule)
 
-**Base (all decks):**
-- Navy / primary dark: `#222F44`
-- Gold accent: `#D3A93D`
-- White background: `#FFFFFF`
-- Near-black text: `#111111` / `#000000`
-- Neutral gray: `#A5A5A5` / `#B1AEAE`
+**Each CIM wears the TARGET COMPANY's own brand identity** — not a fixed IGC palette:
+- Z Deli/Lox → deli-green + retro orange-red + cream, display type, full-bleed food photography
+- Galena/Alquimia → navy + gold (from the Galena logo), white base
+- Biocap → rose/mauve/plum (brand tones), product photography
+- Biscoitê → powder blue (brand color), rounded sans
 
-**Per-project sector accent** (one deck = one accent family, layered over navy+gold):
-- Soul (chemicals): deep teal `#07272D` / `#2E4D58`, coral accent `#EE5340`, ice `#ABC7CA` / `#EEE7E7`
-- Biocap (beauty): purple `#4B2582` / `#AD6ABF` / `#410B30`, dusty rose `#F9EBEC` / `#FDC9CD`, teal `#5A9B9F`
-- Gold Mine (mining): red `#FF0003`, black gradients
+**Workflow for a new deck:** fetch the company's website / teaser / logo / product-asset photos FIRST,
+sample the exact brand colors (hex), and derive the palette from them. IGC scaffolding stays constant;
+the skin is the company's.
 
-Rule: dominant navy/dark + white; ONE sector accent for highlights, stats, chart bars, dividers; gold as premium secondary.
+**Constant IGC scaffolding:** eyebrow section label · TOC repeated before each section · numbered
+thesis pillars · conclusion bands (dark, key words in accent) · at-a-glance (highlights + stat tiles) ·
+client logo walls · timeline · org chart · footprint map · DRE table (dark header, zebra) ·
+`igc` + page + "Confidential" bottom-left · company logo top-right · source note bottom.
 
-## 2. Typography (installed on system, families verified via fc-list)
-- **Headlines / titles:** Source Serif Pro (also: Light 300, SemiBold 600, Black 900)
-- **Body / labels / eyebrows / stats:** Poppins (Light 300, Regular 400, Medium 500, SemiBold 600)
-- Montserrat used in Biocap as body sans (alt). Arial = fallback.
-- Convention: serif for big statements + section titles; geometric sans for everything functional.
+## 1. Mobi brand system (Project Compass v3 — current)
 
-## 3. Standard IM structure (section flow)
-1. **Cover** — project codename + "Confidential Information Memorandum" + country. Full-bleed sector photo (dark gradient) OR white w/ circular photo. IGC logo + company logo(s).
-2. **Disclaimer** — dense legal text, IGC contact block, dark or white.
-3. **Table of Contents / Executive Summary** — numbered sections w/ page numbers, large ghosted letterform or photo on one side.
-4. **Section dividers** (one per section) — dark panel, section name, active item highlighted in accent pill, big company logo / photo.
+Sampled from official logo + fleet livery (site mobitransporte.com.br unreachable from sandbox):
 
-Sections (typical):
-- **Introduction** → "[Company] at a Glance" (financial+operational highlights, stat callouts, segment mix, revenue/EBITDA charts)
-- **Investment Thesis** → 5–6 numbered pillars; market-size slides; global/structural tailwind slides
-- **Company Overview** → products/one-stop-shop, revenue models, portfolio, clients (logo grid + recurrence), suppliers (table), footprint (map + warehouses), history timeline, ESG, ownership/org chart
-- **Financial Information** → revenue/EBITDA/margin evolution, cash generation, growth vectors
-5. **Back cover** — mirrors cover; IGC + company logos; deal team contacts + IGC address.
+| Role | Color |
+|---|---|
+| Brand protagonist | Orange `#F35B1A` (logo arrow, exact mean) + dark `#C6470F`, tint `#FDE9DE` |
+| Dark fields | Graphite `#141A24`, panels `#1F2734`, lines `#323E50` |
+| Content base | White + `#F4F6F8`, lines `#E2E6EB` |
+| Text | `#2B333E` / gray `#6C7683` |
+| Charts | Actuals `#2C3A4F`, emphasis orange, baseline `#D9DEE5` |
 
-## 4. Layout archetypes (reusable)
-- Cover / back-cover (photo or white)
-- Disclaimer (text-dense)
-- TOC + section divider (dark, letterform/photo)
-- "At a Glance" (2-col highlights + 4 stat tiles + mini charts)
-- Numbered thesis pillars (01–06, accent numerals, serif header + sans desc)
-- Market sizing (bar chart + CAGR callout + ranking/flags)
-- One-stop-shop / segment breakdown (left vertical nav w/ circular icons, middle portfolio list, right stats + revenue chart)
-- Client base (logo grid + recurrence charts + stats)
-- Supplier table (dark header, logos, country/products/years/description columns)
-- Footprint (country map + photo strip + dark stat bar: sites / area / countries)
-- History timeline (year milestones + circular photos)
-- Ownership / org chart (accent % badges, boxes)
-- Financials (grouped bar + line margin, CAGR callouts)
+- **Type:** Poppins family (matches Mobi's geometric wordmark). No serif.
+- **Brand-native motifs:** ▶ play-arrow from the logo as list markers / nav arrows; diagonal livery
+  stripes as graphic on dark fields (`assets/stripes_orange.png`); circular photos.
+- **Hybrid aesthetic:** covers/TOCs dark brand-heavy (graphite + photo + strong orange); content slides white.
 
-## 5. Recurring motifs
-- Circular framed photos & circular icon chips
-- Big stat callouts: huge accent number + small sans label
-- Accent "pill" highlight for active nav item
-- Rounded-rectangle cards (subtle tint, no edge stripes)
-- IGC "igc" wordmark top-right on every content slide; company logo bottom.
-- Source note bottom-left (small gray), page number bottom-right.
+## 2. Layout patterns imported per reference
 
-## 6. Assets captured
-- `refs/igc_logo.svg` — IGC wordmark (white version, for dark bg). Need dark version for white slides.
-- Fonts installed: `/usr/share/fonts/truetype/igc/` (Source Serif Pro *, Poppins *).
+- **Lox:** dark full-bleed TOC (display headline + arrow items + page numbers, active in accent);
+  timeline as solid accent year-cards grid; DRE dark-header table; footer color band; unit-detail pages
+  with accent label pills; covers = photo 2/3 + brand field 1/3 with framed project name.
+- **Alquimia:** at-a-glance dark rounded panel with photo-thumb rows; two-business-unit split cards with
+  dark×accent stat bands; numbered accent circles beside pillar titles; conclusion band with accent-
+  highlighted words; eyebrow + colored title header.
+- **Biocap:** eyebrow as rounded tab; numbered rail over photo; brand-field TOC with product photo.
+- **Biscoitê:** pill TOC nav; clean axis-less charts (labels above bars, CAGR brackets); circular photo
+  chips with number badges; choropleth map.
 
-## 7. Render pipeline (working)
-- Build .pptx (pptxgenjs or template-edit) → `soffice --headless --convert-to pdf` → `pdftoppm` for QA.
-- LibreOffice needed `libreoffice-impress` + `libreoffice-writer` installed (core-only was broken).
-- Deliverable = PDF (per client); keep .pptx as editable source.
+## 3. Typography scale (content slides)
+- Title 22pt SemiBold · subtitle 11.5 Regular gray · eyebrow tab 9.5 Medium
+- Section labels 9.5 SemiBold accent CAPS charSpacing · body 9–10 · stat numerals 18–22 SemiBold
+- Conclusion band 12 SemiBold white + accent runs
+
+## 4. Assets (repo `assets/`)
+- `mobi_logo_black/navy.png`, `igc_white/navy.png`, fleet photos, `road_panorama.png`
+- Client logos (official, from teaser): `cli_heineken/roche/kraftheinz/cargill.png` (+ votorantim/jbs/mbrf)
+- Chassis brands `br_*.png`, software `sw_*.png` (TOTVS, VTRAXX, Ituran, Trucks Control, Zion,
+  Open System, Mônaco, Sisma, On Safety, Checklist Fácil)
+- `brazil_map.png` (GO/DF/MG orange) + `brazil_choro.png` · `stripes_orange.png` · `icons/` (26 × 4 colors)
+- Fonts: `/usr/share/fonts/truetype/igc/` (Poppins*, Source Serif Pro*, Montserrat*)
+
+## 5. Render pipeline
+- `node build_deck.js` → `.pptx` → validate (`skills/synced/pptx/scripts/office/validate.py`) →
+  `soffice.py --headless --convert-to pdf` → `pdftoppm -jpeg -r 110` → visual QA every slide.
+- Deliverable = PDF; keep `.pptx` as editable source.
+
+## 6. Content sources (Compass)
+- Teaser-approved external figures: +50 clients, +400 vehicles, BRL 200 Mn fleet, 4 years avg age,
+  BRL 140 Mn net revenues / BRL 36 Mn EBITDA 2025; clients incl. Heineken, Roche, Kraft Heinz, Cargill;
+  positioning "urban mobility platform" serving corporations AND condominium residents.
+- Fleet register (Jan-26): 373 owned vehicles (223 bus / 74 micro / 55 van / 17 support / 2+2) —
+  reconciled in footnotes with the +400 aggregate.
+- Entities: AGM Caetano (corporate core) × AGM Alpha (Matriz Brasília; +74% 1Q26 YoY).
