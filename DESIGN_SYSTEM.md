@@ -1,8 +1,12 @@
 # IGC Partners — Information Memorandum Design System
 
-Extracted from 5 reference decks: `Project_Soul` (Almatia, chemicals), `Projeto_Biocap` (cosmetics),
+Extracted from 6 reference decks: `Project_Soul` (Almatia, chemicals), `Projeto_Biocap` (cosmetics),
 `Project_Gold_Mine` (master template), **`Biscoitê/Bluebird`** (premium biscuits), **`Projeto_Lox`** (Z Deli, delis),
-**`Project_Alquimia`** (Galena, nutraceuticals).
+**`Project_Alquimia`** (Galena, nutraceuticals). All sources live in `refs/` — see `refs/README.md`.
+
+> **Hard numbers live in [`refs/DESIGN_TOKENS.md`](refs/DESIGN_TOKENS.md)** — palette, type scale and
+> geometry measured directly from the OOXML of the three `.pptx` references, reproducible via
+> `python3 refs/extract_tokens.py`. That file is the authority; this one is the narrative.
 
 ## 0. META-PATTERN (the most important rule)
 
@@ -19,7 +23,12 @@ the skin is the company's.
 **Constant IGC scaffolding:** eyebrow section label · TOC repeated before each section · numbered
 thesis pillars · conclusion bands (dark, key words in accent) · at-a-glance (highlights + stat tiles) ·
 client logo walls · timeline · org chart · footprint map · DRE table (dark header, zebra) ·
-`igc` + page + "Confidential" bottom-left · company logo top-right · source note bottom.
+`igc` + page + "Confidential" bottom-left · company logo top-right · source note bottom ·
+**IGC disclaimer slide immediately after the cover** (verbatim boilerplate in
+`refs/disclaimer_boilerplate.txt`).
+
+Underneath every skin two colors persist: **IGC navy `#222F44`** (present in all three `.pptx`
+references regardless of brand) and gold `#D3A93D` (in two of three — signature, not universal).
 
 ## 1. Mobi brand system (Project Compass v3 — current)
 
@@ -50,10 +59,22 @@ Sampled from official logo + fleet livery (site mobitransporte.com.br unreachabl
 - **Biscoitê:** pill TOC nav; clean axis-less charts (labels above bars, CAGR brackets); circular photo
   chips with number badges; choropleth map.
 
-## 3. Typography scale (content slides)
-- Title 22pt SemiBold · subtitle 11.5 Regular gray · eyebrow tab 9.5 Medium
-- Section labels 9.5 SemiBold accent CAPS charSpacing · body 9–10 · stat numerals 18–22 SemiBold
-- Conclusion band 12 SemiBold white + accent runs
+## 3. Typography scale (content slides) — locked to the house grid
+
+Measured from the references, not invented (see `refs/DESIGN_TOKENS.md` §3). The grid is integer-pt
+with **10.5 as the only half-step**; sizes like 9.5 / 8.8 / 11.5 appear in no IGC deck.
+
+- Title **18** SemiBold · subtitle **10.5** Regular gray · eyebrow tab **9** Medium
+- Section labels **9** SemiBold accent CAPS charSpacing · body **9–11** · stat numerals **20** SemiBold
+- TOC display **32** · TOC section **16** · TOC page number **12** · footnote/source **7–8**
+- Conclusion band **12** SemiBold white + accent runs
+
+**Left margin `M = 0.8 in` (2.03 cm)** — the single most-repeated coordinate in every reference
+(66–87 shape origins per deck). Footer baseline `y = 7.10 in` (18.05 cm), i.e. 1.0 cm off the bottom.
+
+**Conclusion band = the footer strip** (Lox pattern): flush to the bottom edge, `y = H-0.75, h = 0.75`,
+with the `igc` mark + page reversed out in white on the band and the source note lifted above it.
+Do not float the band mid-air — it collides with both the footer and the content.
 
 ## 4. Assets (repo `assets/`)
 - `mobi_logo_black/navy.png`, `igc_white/navy.png`, fleet photos, `road_panorama.png`

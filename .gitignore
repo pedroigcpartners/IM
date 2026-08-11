@@ -1,12 +1,8 @@
 # Generated / derived render artifacts (reproducible from sources)
 slide-*.jpg
-*-thumbs*.jpg
 media_grid.png
 refs/**/unpacked/
 **/node_modules/
 scratchpad/
 *.tmp
 .~lock.*
-
-# Reference source PDFs (large); the Compass deliverable PDF is force-added
-refs/*.pdf
