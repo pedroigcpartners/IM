@@ -1,6 +1,6 @@
 # Layout vocabulary — what each reference deck does best
 
-Six IGC CIMs, each strong at something different. Contact sheets of every page are in
+Seven IGC CIMs, each strong at something different. Contact sheets of every page are in
 `assets/thumbs/` — look at them before designing a slide; the patterns below are labels for
 things that are easier to recognise than to read about.
 
@@ -22,7 +22,15 @@ and don't know how to lay it out, find the shape here.
 | A process or value chain | card row with arrow connectors between steps | Gold Mine |
 | Geography | choropleth + base list with pin chips + stat strip | Biscoitê / Soul |
 | A time series of events | year cards in a row, current year in solid accent | Lox |
-| Financials | dark-header zebra table | all six |
+| Financials | dark-header zebra table | all seven |
+| Precedent transactions / why raise capital | **case diptych**: mirrored case modules on a tint band + founder pull-quotes + keyline "investment tickets" (money pill + investor logo + rationale) + conclusion band | Glam |
+| A brand with strong monochrome product photography | **color-fused pages**: photos art-directed on the brand color so photo and flat field merge (cover, dividers, back cover); photo-split TOC ⅔/⅓ with active row in a white-keyline box | Glam |
+| Social proof / community traction | bottom accent band with platform glyphs + follower counts; testimonial column (star rows + quote + client chip); third-party rating scorecard | Glam |
+| Competitor benchmark | bar chart with **competitor logos as axis labels** + a circle badge on each bar end carrying a second metric; smartphone mockup as evidence exhibit | Glam |
+| Survey / consumer-research data | twin-column survey module (intro + methodology caption + chart + keyline takeaway); "A × B" duel scoreboard with paired big percentages, home value white vs comparison ghosted | Glam |
+| Org chart with team sizes | two-tone hierarchy (solid accent = leadership, tint = teams) + headcount badges + "44 = 10 + 34" equation strip | Glam |
+| A cycle / flywheel | circular diagram: white disc, 4 accent icon nodes on the ring, arrowed arcs, quadrant captions | Glam |
+| Growth avenues with strong photography | **full-bleed photo triptych** — three edge-to-edge photos as the headers of numbered columns; photography as structure, zero chrome | Glam |
 
 ---
 
@@ -38,6 +46,25 @@ stat band. Growth avenues as numbered circles on a dotted path. ESG in three col
 letter badges. Year-column timeline with logo chips. Shareholder cards with % badges. Back
 cover = logo lockup + team photo + contact columns. Motifs: teardrop/blob shapes (52×),
 rounded photo frames, brand glyph as watermark.
+
+**Glam (Mari Maria Makeup — the maximalist, 19 visible + 5 hidden slides).** Total brand
+immersion: the accent (`#FF5700`) plays the dark-field role — covers, TOC rails, hero bands,
+org-chart nodes are all saturated brand orange, and IGC navy survives only in scaffolding.
+The defining move is **color-fused photography**: product shots art-directed on the brand color
+so a photo can fill ⅔ of a page and dissolve into the flat color rail with no visible edge.
+Charts render **directly on the accent field** with tint bars + white labels (evidence rail,
+ranking card, duel scoreboard, social-proof band) — reusable in any brand color. Section
+dividers are photo-split TOCs with a rotating product hero and the active row in a
+white-keyline outlined box. At-a-glance is a half-page hero band: brand story above (founder
+quote + channel photos + KPI cluster), analytics below on white. Unique content templates:
+the precedent-transactions case diptych (Huda Beauty / Glossier) with investment tickets;
+logo-labeled benchmark bars; two-tone org charts with scalloped %-bubble badges and a grouping
+capsule for related shareholders; star-rating testimonials + Reclame Aqui scorecard; circular
+flywheel; full-bleed photo triptych for growth avenues; choropleth carrying two datasets
+(on-map brand metric + legend keyed to % of GDP), with a donut → arrow → stat connector.
+*Caveat: the source deck ships with visible text-overflow bugs ("Internacionalizaçã/o",
+"1.70/0") and a title/subtitle collision on p11 — proof that even house decks skip the render
+QA loop; do not copy those.*
 
 **Lox (Z Deli).** Dark full-bleed TOC with display headline, arrow items and page numbers.
 Timeline as solid accent year-cards. DRE with dark header. **Footer colour band** — the

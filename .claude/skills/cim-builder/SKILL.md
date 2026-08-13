@@ -7,8 +7,8 @@ description: "Monta, redesenha ou estende um CIM / Information Memorandum (memor
 
 Monta o Information Memorandum de um processo sell-side como deck `.pptx`, no padrão da casa.
 
-O material aqui foi destilado de seis CIMs reais da IGC (Gold Mine, Soul, Biocap, Lox,
-Alquimia, Biscoitê), medindo o XML dos arquivos — não estimando de PDFs. Você não precisa
+O material aqui foi destilado de sete CIMs reais da IGC (Gold Mine, Soul, Biocap, Lox,
+Alquimia, Biscoitê, Glam/Mari Maria), medindo o XML dos arquivos — não estimando de PDFs. Você não precisa
 redescobrir a grade tipográfica nem as margens: elas já estão codificadas em
 `scripts/igc_deck.js`.
 
@@ -126,7 +126,7 @@ muito mais caro do que um espaço em branco.
 | `references/layout-vocabulary.md` | ao escolher o layout de um slide |
 | `references/design-tokens.md` | ao justificar/estender valores, ou ao incorporar nova referência |
 | `references/disclaimer.txt` | no slide 2, verbatim |
-| `assets/thumbs/` | contact sheets das seis referências — olhe antes de desenhar |
+| `assets/thumbs/` | contact sheets das sete referências — olhe antes de desenhar |
 | `scripts/igc_deck.js` | o kit de construção |
 | `scripts/preflight.sh` | uma vez por projeto, antes do primeiro build |
 | `scripts/qa_deck.py` | depois de cada build |

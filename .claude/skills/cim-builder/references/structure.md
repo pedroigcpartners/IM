@@ -36,6 +36,8 @@ COMPANY OVERVIEW
  22  Success case C ................ same layout, rail active on C
  23  Management team
  24  Corporate structure
+ --  (optional) Precedent transactions .. case diptych w/ investment tickets (Glam p18) —
+     use when comparable funding rounds / acquisitions strengthen the story
  25  TOC ........................... Financial Highlights active
 
 FINANCIAL HIGHLIGHTS

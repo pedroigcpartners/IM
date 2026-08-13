@@ -1,7 +1,8 @@
 # IGC IM — hard design tokens
 
-Measured directly from the OOXML of the three reference `.pptx` decks in this folder
-(`Project_Gold_Mine` = house master template, `Project_Soul`, `Projeto_Biocap`).
+Measured directly from the OOXML of the four reference `.pptx` decks in this folder
+(`Project_Gold_Mine` = house master template, `Project_Soul`, `Projeto_Biocap`,
+`Projeto_Glam_IM_2026` = Mari Maria Makeup, cosmetics).
 Numbers below are counted occurrences, not impressions — a PDF cannot yield these.
 
 Re-run the extraction with `refs/extract_tokens.py` (see bottom).
@@ -13,20 +14,21 @@ Re-run the extraction with `refs/extract_tokens.py` (see bottom).
 | | value |
 |---|---|
 | Slide size | **33.867 × 19.05 cm** = 13.333 × 7.5 in = 16:9 |
-| Identical across | Gold ✓ Soul ✓ Biocap ✓ |
+| Identical across | Gold ✓ Soul ✓ Biocap ✓ Glam ✓ |
 
 ## 2. The two constants that survive every brand skin
 
 Each CIM re-skins to the target company's brand (see `../DESIGN_SYSTEM.md` §0), but these
 persist underneath regardless of skin:
 
-| Token | Hex | Gold | Soul | Biocap | Note |
-|---|---|---|---|---|---|
-| **IGC navy** | `#222F44` | 5 | 73 | 4 | **In all three.** The house dark. Scaffolding, footer marks, chart darks. |
-| IGC gold | `#D3A93D` | 2 | 19 | — | In 2 of 3. Signature accent, *not* universal — absent from Biocap. |
+| Token | Hex | Gold | Soul | Biocap | Glam | Note |
+|---|---|---|---|---|---|---|
+| **IGC navy** | `#222F44` | 5 | 73 | 4 | 19 | **In all four.** The house dark. Scaffolding, footer marks, chart darks. |
+| IGC gold | `#D3A93D` | 2 | 19 | — | — | In 2 of 4. Signature accent, *not* universal. |
 
 Everything else in the palette is the target company's own:
-Gold Mine `#FF0003` red · Soul `#07272D`/`#EE5340` teal+coral · Biocap `#AD6AC0`/`#410B30`/`#F9EBEC` plum+rose.
+Gold Mine `#FF0003` red · Soul `#07272D`/`#EE5340` teal+coral · Biocap `#AD6AC0`/`#410B30`/`#F9EBEC` plum+rose ·
+Glam `#FF5700`/`#F48007` orange + `#FAE7D7` tint + `#C8FF54` lime spark.
 
 ## 3. Type
 
@@ -49,9 +51,9 @@ Poppins 466 · Source Serif Pro Black 308.
 | Pillar body / callout | **11** | Gold s6 pillar text = 11 |
 | **Body** | **9** | Biocap s4 pillar body = 9 Montserrat Medium |
 | TOC page number | **12** | Soul s5 |
-| Footnote / source | **7–8** | all three |
+| Footnote / source | **7–8** | all four |
 
-Dominant sizes by raw count, all three decks: **12, 18, 8, 9, 10, 11, 14, 16, 20, 24** (+10.5).
+Dominant sizes by raw count, all four decks: **12, 18, 8, 9, 10, 11, 14, 16, 20, 24** (+10.5).
 The grid is integer-pt with 10.5 the single half-step. Sizes like 9.5 / 8.8 / 11.5 appear
 **nowhere** in any reference — they read as off-house.
 
@@ -59,9 +61,9 @@ The grid is integer-pt with 10.5 the single half-step. Sizes like 9.5 / 8.8 / 11
 
 | Token | Value | Evidence |
 |---|---|---|
-| **Left margin** | **2.03 cm** (0.8 in) | Most common shape origin in all three: Gold 66× · Soul 87× · Biocap 33× |
+| **Left margin** | **2.03 cm** (0.8 in) | Most common shape origin in all four: Gold 66× · Soul 87× · Biocap 33× · Glam 42× |
 | Right margin | ~0.99–2.03 cm | 0.99 is the logo/page-number edge; 2.03 for content |
-| **Footer baseline** | **y ≈ 18.05 cm** (1.0 cm from bottom) | Gold 18.14 · Soul 18.02–18.05 · Biocap 18.04 |
+| **Footer baseline** | **y ≈ 18.05 cm** (1.0 cm from bottom) | Gold 18.14 · Soul 18.02–18.05 · Biocap 18.04 · Glam 18.04–18.14 |
 | Pill radius | `roundRect adj=50000` (stadium) | Gold 39× · Biocap 10× |
 | Card radius | `roundRect adj≈7900` (~7.9%) | Soul 101× |
 | Tab / card motif | `round2SameRect adj=0` | Biocap 21× · Gold 11× · Soul 7× — square-top card |

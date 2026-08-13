@@ -23,6 +23,7 @@ when deriving style; a PDF flattens all of it away.
 | `Project_Gold_Mine.pptx` | **house master template** | red `#FF0003` + gray |
 | `Project_Soul.pptx` | Almatia, chemicals | teal `#07272D` + coral `#EE5340` |
 | `Projeto_Biocap.pptx` | Biocap, cosmetics | plum `#AD6AC0` / `#410B30` + rose `#F9EBEC` |
+| `Projeto_Glam_IM_2026.pptx` | Mari Maria Makeup, cosmetics | orange `#FF5700`/`#F48007` + tint `#FAE7D7` + lime `#C8FF54` (slides 20–24 hidden appendix) |
 
 ### `.pdf` — visual reference only
 | Deck | Company / sector | Skin |

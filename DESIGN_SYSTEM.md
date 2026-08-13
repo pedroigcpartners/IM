@@ -1,11 +1,12 @@
 # IGC Partners — Information Memorandum Design System
 
-Extracted from 6 reference decks: `Project_Soul` (Almatia, chemicals), `Projeto_Biocap` (cosmetics),
+Extracted from 7 reference decks: `Project_Soul` (Almatia, chemicals), `Projeto_Biocap` (cosmetics),
 `Project_Gold_Mine` (master template), **`Biscoitê/Bluebird`** (premium biscuits), **`Projeto_Lox`** (Z Deli, delis),
-**`Project_Alquimia`** (Galena, nutraceuticals). All sources live in `refs/` — see `refs/README.md`.
+**`Project_Alquimia`** (Galena, nutraceuticals), **`Projeto_Glam`** (Mari Maria Makeup, cosmetics).
+All sources live in `refs/` — see `refs/README.md`.
 
 > **Hard numbers live in [`refs/DESIGN_TOKENS.md`](refs/DESIGN_TOKENS.md)** — palette, type scale and
-> geometry measured directly from the OOXML of the three `.pptx` references, reproducible via
+> geometry measured directly from the OOXML of the four `.pptx` references, reproducible via
 > `python3 refs/extract_tokens.py`. That file is the authority; this one is the narrative.
 
 ## 0. META-PATTERN (the most important rule)
@@ -15,6 +16,7 @@ Extracted from 6 reference decks: `Project_Soul` (Almatia, chemicals), `Projeto_
 - Galena/Alquimia → navy + gold (from the Galena logo), white base
 - Biocap → rose/mauve/plum (brand tones), product photography
 - Biscoitê → powder blue (brand color), rounded sans
+- Mari Maria/Glam → total orange immersion `#FF5700`/`#F48007` (photography included) + lime `#C8FF54` spark
 
 **Workflow for a new deck:** fetch the company's website / teaser / logo / product-asset photos FIRST,
 sample the exact brand colors (hex), and derive the palette from them. IGC scaffolding stays constant;
@@ -27,8 +29,8 @@ client logo walls · timeline · org chart · footprint map · DRE table (dark h
 **IGC disclaimer slide immediately after the cover** (verbatim boilerplate in
 `refs/disclaimer_boilerplate.txt`).
 
-Underneath every skin two colors persist: **IGC navy `#222F44`** (present in all three `.pptx`
-references regardless of brand) and gold `#D3A93D` (in two of three — signature, not universal).
+Underneath every skin two colors persist: **IGC navy `#222F44`** (present in all four `.pptx`
+references regardless of brand) and gold `#D3A93D` (in two of four — signature, not universal).
 
 ## 1. Mobi brand system (Project Compass v3 — current)
 
@@ -69,6 +71,20 @@ Sampled from official logo + fleet livery (site mobitransporte.com.br unreachabl
 - **Biocap:** eyebrow as rounded tab; numbered rail over photo; brand-field TOC with product photo.
 - **Biscoitê:** pill TOC nav; clean axis-less charts (labels above bars, CAGR brackets); circular photo
   chips with number badges; choropleth map.
+- **Glam (Mari Maria — the maximalist reference, 19 visible slides + 5 hidden):** total brand
+  immersion — the accent plays the dark-field role (navy only in scaffolding). **Color-fused
+  photography**: product shots art-directed on the brand color so photo and flat field merge
+  (cover, dividers, back cover). **Photo-split TOC**: photo ⅔ + solid accent rail ⅓, active row
+  in a white-keyline box, rotating product hero per section. **Charts reversed onto the accent
+  field** (tint bars + white labels): evidence rails, a "Brasil × Mundo" duel scoreboard with
+  ×-paired percentages, a bottom social-proof band (platform glyphs + follower counts).
+  **Precedent-transactions case diptych** (Huda/Glossier): mirrored case modules on a tint band +
+  founder pull-quotes + orange-keyline "investment tickets" (money pill + investor logo + rationale).
+  **Full-bleed photo triptych** for growth avenues (photos as column headers). **Two-tone org
+  charts** (solid accent = leadership, tint = teams; scalloped %-bubble badges; headcount equation
+  44 = 10 + 34). Logo-labeled benchmark bars + smartphone mockup as evidence; star-rating
+  testimonials + Reclame Aqui scorecard; circular flywheel diagram; half-page hero band
+  at-a-glance ("brand above, numbers below").
 
 ## 3. Typography scale (content slides) — locked to the house grid
 
