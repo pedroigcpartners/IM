@@ -49,6 +49,33 @@ Sampled from official logo + fleet livery (site mobitransporte.com.br unreachabl
   stripes as graphic on dark fields (`assets/stripes_orange.png`); circular photos.
 - **Hybrid aesthetic:** covers/TOCs dark brand-heavy (graphite + photo + strong orange); content slides white.
 
+## 1b. Tracbel Agro brand system (Project Green / Project Yellow teaser)
+
+Tracbel Agro is a John Deere dealer, so the skin is John Deere's green-and-yellow read through
+Tracbel Agro's own 2026 institutional deck (`assets/tracbel/`). Every hex was measured, not picked:
+flat fills counted page by page off the rendered deck, plus the `rg`/`RG` operators tallied inside
+its PDF content streams. Their site was unreachable from the sandbox (egress-blocked), so the deck
+is the sole source.
+
+| Role | Color | Where it was measured |
+|---|---|---|
+| Dark fields · ink · rules | Field green `#275417` | back cover, p13 — 780k px, the largest flat area in their deck |
+| Brand protagonist | John Deere green `#367C2B` | vector fills; `#017C34`/`#007B33` and `#3C7D23` are the same green in their other slides |
+| Accent on light | Amber `#E4A000` | on-white accent runs, p4 |
+| Accent on dark | John Deere yellow `#FFDE00` | rules and headlines over green/photo, p2 · p7 · p10 |
+| Mid green | `#439539` | p2 · p9 |
+| Cream / lime | `#FFF0CC` · `#BEF785` | value cards p3 · p6, highlight band p11 |
+| Derived neutrals | `#16300D` deep shade · `#E1E8DC` lines · `#F4F7F1` wash | tints/shades of the field green |
+
+**The accent has to split in two.** John Deere yellow is a dark-field colour: at full strength on
+white it drops to 1.7:1 and the numerals go weak. Amber `#E4A000` holds 2.25:1, matching the IGC
+gold it replaces (2.21:1) almost exactly, so display type keeps its designed presence. Yellow is
+reserved for reversing out of green — 6.6:1 over `#275417` — which is how Tracbel Agro set it
+themselves, always over green or photography.
+
+Applied by `recolor_tracbel_agro.py`, which re-skins the teaser in place: geometry, type, copy and
+the `igc` mark are untouched, and 22 of the 28 package parts stay byte-identical.
+
 ## 2. Layout patterns imported per reference
 
 - **Soul (Almatia — the richest reference, 29 slides):** TOC as white panel + giant brand-glyph
