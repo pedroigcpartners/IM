@@ -115,13 +115,13 @@ function source(s, t) {
     ['Armadillo MRLS',
      '5 units in 2028 to 35 in 2031 at US$ 1.7–2.1 mm each. Adds US$ 72 mm by 2032 — 20% of the unit — from a standing start.', 0.92],
     ['Smart-weapons tail',
-     'Dagger, 70 mm rocket and fuzes reach US$ 24 mm by 2032. Small in revenue, but they defend the margin as the shell dilutes it.', 0.86],
+     'Dagger, 70 mm rocket and fuzes reach US$ 14 mm by 2032. Small in revenue, but they defend the margin as the shell dilutes it.', 0.86],
   ], '6FA82F');
 
   chip(s, COL2, 5.32, { value: '42%', label: '155 mm capacity used, 2032', circle: A.tint, icon: '▲', iconColor: K.INK, w: 1.75 });
   chip(s, COL2, 6.06, { value: '41% → 35%', label: 'Gross margin to 2032', circle: A.tint, icon: '◆', iconColor: K.INK, w: 1.75 });
   chip(s, COL2 + 2.55, 5.32, { value: '12%', label: 'of group growth capex', circle: A.tint, icon: '$', iconColor: K.INK, w: 1.50 });
-  chip(s, COL2 + 2.55, 6.06, { value: '16.6x', label: 'Gross profit vs BU capex', circle: A.tint, icon: '■', iconColor: K.INK, w: 1.50 });
+  chip(s, COL2 + 2.55, 6.06, { value: 'US$ 550 mm', label: 'Gross profit 2027–32', circle: A.tint, icon: '■', iconColor: K.INK, w: 1.50 });
 
   statCard(s, 9.090, 5.365, 1.811, 1.263, { pre: 'USD', value: '110', unit: 'mm', label: 'Revenue in 2027E', tint: A.tint });
   statCard(s, 11.050, 5.365, 1.916, 1.263, { pre: 'USD', value: '33', unit: 'mm', label: '2027 growth capex', tint: A.tint });
@@ -157,20 +157,20 @@ function source(s, t) {
 
   mechanism(s, COL3, TOPY, COL3W, 'Why the curve falls', [
     ['Five country contracts, finite by construction',
-     'Azerbaijan ends 2027, Malaysia 2028, ICOR 2029, UAE 2030, Canada 2031 — 91% of 2027 revenue, and zero by 2032.', 0.92],
+     'Azerbaijan ends 2027, ICOR and Malaysia 2029, UAE 2030, Canada 2031 — 100% of 2027 revenue, and zero by 2032.', 0.92],
     ['Only two lines survive the horizon',
      'HMX reaches US$ 15 mm in 2032. “New contracts” — the replacement line — is set at US$ 10.5 mm and US$ 25 mm. That is the entire renewal assumption.', 0.96],
     ['The CIM’s own pipeline is not in the model',
      'Page 41 of the CIM shows a US$ 900 mm 2027 pipeline for Energetics. The model books US$ 35 mm of new contracts across 2031–32. That gap is the upside.', 0.90],
   ], 'C79000');
 
-  chip(s, COL2, 5.32, { value: '91%', label: '2027 from 5 contracts', circle: A.tint, icon: '▲', iconColor: K.INK, w: 1.75 });
+  chip(s, COL2, 5.32, { value: '100%', label: 'of 2027 revenue', circle: A.tint, icon: '▲', iconColor: K.INK, w: 1.75 });
   chip(s, COL2, 6.06, { value: '43%', label: 'Gross margin, flat', circle: A.tint, icon: '◆', iconColor: K.INK, w: 1.75 });
-  chip(s, COL2 + 2.55, 5.32, { value: 'US$ 25 mm', label: 'Lowest growth capex', circle: A.tint, icon: '$', iconColor: K.INK, w: 1.50 });
-  chip(s, COL2 + 2.55, 6.06, { value: 'US$ 35 mm', label: 'new contracts booked', circle: A.tint, icon: '■', iconColor: K.INK, w: 1.50 });
+  chip(s, COL2 + 2.55, 5.32, { value: 'US$ 253 mm', label: 'Gross profit 2026–32', circle: A.tint, icon: '$', iconColor: K.INK, w: 1.50 });
+  chip(s, COL2 + 2.55, 6.06, { value: '2029', label: 'Peak, then run-off', circle: A.tint, icon: '■', iconColor: K.INK, w: 1.50 });
 
   statCard(s, 9.090, 5.365, 1.811, 1.263, { pre: 'USD', value: '115', unit: 'mm', label: 'Revenue in 2027E', tint: A.tint });
-  statCard(s, 11.050, 5.365, 1.916, 1.263, { pre: 'USD', value: '150', unit: 'mm', label: 'Peak year, 2029E', tint: A.tint });
+  statCard(s, 11.050, 5.365, 1.916, 1.263, { pre: 'USD', value: '25', unit: 'mm', label: '2027 growth capex', tint: A.tint });
   source(s, SRC + ' “New contracts” is the model’s own replacement line, not an IGC estimate.');
   footer(s, 'B');
 }
@@ -205,9 +205,9 @@ function source(s, t) {
     ['GGM Cruise Missile 300 is the unit',
      '15 units in 2027 to 150 in 2032, at US$ 1.9 mm rising to US$ 2.55 mm each. Alone it is 54% of the unit in 2032 and 34% of the group.', 0.92],
     ['US$ 210 mm of capex, all in 2027',
-     '78% of the group’s US$ 268 mm total, committed in one year. Gross profit repays it 4.6x by 2032 — against 16.6x for Munitions on a fraction of the cheque.', 0.94],
+     '78% of the group’s US$ 268 mm total, committed in a single year — years before the volume that repays it. Nothing else in the plan is this front-loaded.', 0.94],
     ['The only expanding margin in the group',
-     '49% in 2028 to 52% in 2032, while Munitions dilutes from 41% to 35%. Mix, not price.', 0.90],
+     '49% in 2028 to 52% in 2032 — the only unit whose margin expands across the plan. Mix, not price: missile programmes run near 50% gross margin.', 0.90],
   ], '1E48E0');
 
   chip(s, COL2, 5.32, { value: '78%', label: 'of group growth capex', circle: A.tint, icon: '$', iconColor: K.INK, w: 1.75 });
