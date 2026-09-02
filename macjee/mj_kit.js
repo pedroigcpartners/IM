@@ -35,7 +35,7 @@ const TABS = [
   ['Business Units and Portfolio', 3.462],
   ['Financials',                 5.194],
 ];
-const TABW = { 0: 1.10, 1: 1.45, 2: 1.55, 3: 0.62 };
+const TABW = { 0: 1.10, 1: 1.45, 2: 1.55, 3: 0.46 };
 
 function init() {
   const p = new pptxgen();
@@ -104,10 +104,10 @@ function chrome(s, o) {
   });
   // sublinhado da aba ativa, com losangos nas pontas
   const ax = TABS[active][1], aw = TABW[active];
-  rect(s, ax, 0.487, aw, 0.012, '2196F3');
+  rect(s, ax, 0.484, aw, 0.010, '27B0FF');
   [ax, ax + aw].forEach(dx =>
-    s.addShape('diamond', { x: dx - 0.035, y: 0.458, w: 0.07, h: 0.07,
-      fill: { color: '2196F3' }, line: { type: 'none' } }));
+    s.addShape('diamond', { x: dx - 0.028, y: 0.458, w: 0.056, h: 0.056,
+      fill: { color: '27B0FF' }, line: { type: 'none' } }));
 
   s.addImage({ path: o.logo || 'assets/macjee_gold.png', x: 12.439, y: 0.376, w: 0.527, h: 0.527 });
 
@@ -127,14 +127,16 @@ function chrome(s, o) {
   txt(s, o.title, { x: tx, y: 0.80, w: W - tx - 0.55, h: 0.42, valign: 'middle',
     fontFace: F, bold: true, fontSize: 24, color: o.titleColor || NAVY });
   if (o.subtitle) {
-    txt(s, o.subtitle, { x: tx, y: 1.235, w: W - tx - 0.55, h: 0.26, valign: 'middle',
-      fontFace: F, fontSize: 11, color: '3C4657' });
+    txt(s, o.subtitle, { x: bu ? tx : 0.375, y: 1.215, w: W - tx - 0.55, h: 0.28, valign: 'middle',
+      fontFace: F, fontSize: o.subtitleSize || 12, color: o.subtitleColor || INK });
   }
 }
 
 /** Rodapé: número da página + pílula Confidential. Chame por último. */
 function footer(s, page, opts) {
   const onDark = !(opts && opts.onWhite);
+  if (opts && opts.source) txt(s, opts.source, { x: 0.685, y: 7.06, w: 10.8, h: 0.20, valign: 'middle',
+    fontFace: 'Montserrat Light', fontSize: 8.04, color: onDark ? 'D8D8D8' : 'A6A6A6' });
   txt(s, String(page), { x: 0.391, y: 7.06, w: 0.5, h: 0.20, valign: 'middle',
     fontFace: FSB, fontSize: 8.04, color: onDark ? 'FFFFFF' : INK });
   s.addShape('roundRect', { x: 11.955, y: 7.075, w: 1.02, h: 0.215, rectRadius: 0.04,

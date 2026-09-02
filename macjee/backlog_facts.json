@@ -1,0 +1,190 @@
+{
+ "bu": {
+  "MJD": {
+   "bu": "Munitions & Weapon Systems",
+   "legal": "Mac Jee Indústria de Defesa",
+   "n_signed": 4,
+   "n_pipe": 30,
+   "n_pipe_valued": 26,
+   "signed": 62.7,
+   "stated_backlog": 63,
+   "stated_pipeline": 591,
+   "gross_pipeline": 1542.6,
+   "weighted": 608.0,
+   "other_identified": 951.6,
+   "top": [
+    {
+     "p": "Fornecimento de 60.000 unidades de 155 mm ERFBBB",
+     "pais": "BNV",
+     "v": 250.0,
+     "prob": 0.75,
+     "tipo": "Ongoing Proposal"
+    },
+    {
+     "p": "Fornecimento Foguetes 30 km, 60 km e 80 km",
+     "pais": "Qatar",
+     "v": 223.5,
+     "prob": 0.2,
+     "tipo": "Business Development"
+    },
+    {
+     "p": "Fornecimento de 100.000 unidades de 155 mm M107",
+     "pais": "BNV",
+     "v": 197.0,
+     "prob": 0.3,
+     "tipo": "Ongoing Proposal"
+    },
+    {
+     "p": "Fornecimento de 60.000 unidades de 155 mm ERFBBB",
+     "pais": "ILP Bulgaria",
+     "v": 178.0,
+     "prob": 0.6,
+     "tipo": "Ongoing Proposal"
+    },
+    {
+     "p": "Fornecimento de 50.000 unidades de 155 mm ERFBBB (+150,000)",
+     "pais": "ILP Bulgaria",
+     "v": 160.0,
+     "prob": 0.6,
+     "tipo": "Ongoing Proposal"
+    }
+   ],
+   "regiao": {
+    "Europa Oriental e Ásia Central": 955.8,
+    "MENA": 554.8,
+    "LATAM": 49.8,
+    "América do Norte": 30.5,
+    "Ásia e Sudeste Asiático": 9.1,
+    "Europa Ocidental": 5.4
+   }
+  },
+  "MJT": {
+   "bu": "Energetics",
+   "legal": "Mac Jee Tecnologia",
+   "n_signed": 2,
+   "n_pipe": 10,
+   "n_pipe_valued": 10,
+   "signed": 75.0,
+   "stated_backlog": 75,
+   "stated_pipeline": 251,
+   "gross_pipeline": 1062.3,
+   "weighted": 474.5,
+   "other_identified": 811.3,
+   "top": [
+    {
+     "p": "Fornecimento de Linhas Quimicas  Canada (TNT, 20000T/Ano)",
+     "pais": "CANADA NALAGX",
+     "v": 200.0,
+     "prob": 0.4,
+     "tipo": "Business Development"
+    },
+    {
+     "p": "Fornecimento de Linhas Quimicas (RDX, TNT, Waste  water, Aci",
+     "pais": "Emirados Árabes",
+     "v": 191.7,
+     "prob": 0.75,
+     "tipo": "Ongoing Proposal"
+    },
+    {
+     "p": "Fornecimento de Linhas Quimicas (RDX e TNT)",
+     "pais": "BAE UK",
+     "v": 190.0,
+     "prob": 0.4,
+     "tipo": "Business Development"
+    },
+    {
+     "p": "Fornecimento de Linhas Quimicas (TNT, 6000T/Ano)",
+     "pais": "Pakistan Ordnance Factory",
+     "v": 97.7,
+     "prob": 0.4,
+     "tipo": "Business Development"
+    },
+    {
+     "p": "Fornecimento de Linhas Quimicas (TNT &  Acids)",
+     "pais": "Casaquistao",
+     "v": 97.7,
+     "prob": 0.3,
+     "tipo": "Ongoing Proposal"
+    }
+   ],
+   "regiao": {
+    "Europa Oriental e Ásia Central": 349.6,
+    "América do Norte": 250.0,
+    "MENA": 234.0,
+    "Europa Ocidental": 190.0,
+    "Ásia e Sudeste Asiático": 113.7
+   }
+  },
+  "TMC": {
+   "bu": "Missile",
+   "legal": "TMC — The Missile Company",
+   "n_signed": 0,
+   "n_pipe": 9,
+   "n_pipe_valued": 7,
+   "signed": 0,
+   "stated_backlog": 0,
+   "stated_pipeline": 1000,
+   "gross_pipeline": 1850.7,
+   "weighted": 828.8,
+   "other_identified": 850.7,
+   "top": [
+    {
+     "p": "Programa Confidencial KSA",
+     "pais": "KSA",
+     "v": 1000.0,
+     "prob": 0.5,
+     "tipo": "Business Development"
+    },
+    {
+     "p": "Programa Confidencial RSAF",
+     "pais": "KSA",
+     "v": 400.0,
+     "prob": 0.35,
+     "tipo": "Business Development"
+    },
+    {
+     "p": "Programa Confidencial MOD AZERBAIJAN",
+     "pais": "AZERBAIJAN",
+     "v": 200.0,
+     "prob": 0.3,
+     "tipo": "Business Development"
+    },
+    {
+     "p": "Desenvolvimento e Fornecimento de SAM (Surface Air Missile)",
+     "pais": "Republica Tcheca",
+     "v": 159.0,
+     "prob": 0.5,
+     "tipo": "Business Development"
+    },
+    {
+     "p": "SAFRAN - Motor de foguete para kits de guiamento A2SM\nFornec",
+     "pais": "França (SAFRAN Eletronics and Defense)",
+     "v": 70.2,
+     "prob": 0.6,
+     "tipo": "Business Development"
+    }
+   ],
+   "regiao": {
+    "MENA": 1400.0,
+    "Europa Ocidental": 250.7,
+    "Europa Oriental e Ásia Central": 200.0
+   }
+  }
+ },
+ "total": {
+  "signed": 137.7,
+  "stated_pipeline": 1842,
+  "gross": 4455.599999999999,
+  "weighted": 1911.3,
+  "n_opps": 49,
+  "n_signed": 6,
+  "regiao": {
+   "MENA": 2188.8,
+   "Europa Oriental e Ásia Central": 1505.4,
+   "Europa Ocidental": 446.1,
+   "América do Norte": 280.5,
+   "Ásia e Sudeste Asiático": 122.8,
+   "LATAM": 49.8
+  }
+ }
+}
