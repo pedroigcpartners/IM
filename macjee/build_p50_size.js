@@ -18,7 +18,7 @@ const INK = K.INK, GREY_T = '3C4657', GREY_L = '8C93A8', BLUE_L = '95A8FE';
 
 chrome(s, { tab: 3,
   title: 'US$ 4.6 bn of identified opportunity by business unit',
-  subtitle: '49 valued programmes across 21 countries — 1.1x the entire 2026–32 revenue plan, already identified commercially' });
+  subtitle: '49 valued programmes across 21 countries and six regions — the demand already identified behind the three units' });
 
 /* ===================== card branco (geometria da p49) ===================== */
 const CX = 0.391, CY = 1.56, CW = 12.551, CH = 3.38, CUT = 0.348;
@@ -42,15 +42,18 @@ txt(s, 'identified commercial opportunity', { x: TX + 0.24, y: TY + 1.06, w: TW 
   valign: 'middle', fontFace: K.F, fontSize: 7.8, color: 'C6CBDA' });
 rect(s, TX + 0.24, TY + 1.34, TW - 0.48, 0.010, '3C4E86');
 
-const TM = [['Valued programmes', '49'], ['Countries', '21'],
-            ['Revenue in the 2026–32 plan', 'US$ 4.1 bn'], ['Plan coverage', '1.1x']];
+const TM = [['Valued programmes', '49'], ['Countries', '21'], ['Regions', '6']];
 TM.forEach(([l, v], i) => {
-  const y = TY + 1.46 + i * 0.295;
+  const y = TY + 1.44 + i * 0.29;
   txt(s, l, { x: TX + 0.24, y, w: 1.62, h: 0.20, valign: 'middle',
     fontFace: K.F, fontSize: 7.6, color: 'C6CBDA' });
   txt(s, v, { x: TX + TW - 1.12, y, w: 0.88, h: 0.20, align: 'right', valign: 'middle',
     fontFace: K.F, bold: true, fontSize: 9.5, color: 'FFFFFF' });
 });
+rect(s, TX + 0.24, TY + 2.34, TW - 0.48, 0.010, '3C4E86');
+txt(s, 'Every unit carries more than US$ 1 bn on its own',
+  { x: TX + 0.24, y: TY + 2.44, w: TW - 0.48, h: 0.36, valign: 'top',
+    fontFace: K.FM, fontSize: 8.4, color: BLUE_L, lineSpacingMultiple: 1.14 });
 
 /* ---------- seções 2-4: uma por BU ---------- */
 const BUS = [
@@ -58,22 +61,22 @@ const BUS = [
     desc: 'Aerial bombs, artillery, rockets, fuzes and launcher vehicles — already in serial production',
     hero: '1.6', total: 1605.3, share: '35%',
     prog: '30 programmes  ·  12 countries',
-    big: 'US$ 250 mm — 155 mm ERFBBB, Bulgaria',
-    plan: 'US$ 1.55 bn  ·  104% covered',
+    qual: 'In serial production today, and the widest customer base of the three units — from NATO-standard artillery to launcher vehicles.',
+    avg: 'Average programme US$ 54 mm',
     next: 'Capacity is already built' },
   { name: 'Energetics', legal: 'Mac Jee Tecnologia', accent: 'C79000', bar: 'FFC000',
     desc: 'Turnkey TNT, RDX and HMX production lines delivered to sovereign customers worldwide',
     hero: '1.1', total: 1137.3, share: '25%',
     prog: '12 programmes  ·  11 countries',
-    big: 'US$ 200 mm — TNT line, 20 kt/yr, Canada',
-    plan: 'US$ 0.61 bn  ·  188% covered',
+    qual: 'Every programme is a turnkey production line rather than a product, delivered to sovereign customers and licensed to operate.',
+    avg: 'Average programme US$ 95 mm',
     next: 'Revenue is contracted, not forecast' },
   { name: 'Missile', legal: 'TMC — The Missile Company', accent: '4A5261', bar: '9AA3B2',
     desc: 'Cruise missiles, air defence, anti-radiation systems and rocket motors for European and Gulf primes',
     hero: '1.9', total: 1850.7, share: '40%',
     prog: '7 programmes  ·  6 countries',
-    big: 'US$ 1,000 mm — confidential, Saudi Arabia',
-    plan: 'US$ 1.93 bn  ·  96% covered',
+    qual: 'The fewest programmes and by far the largest, with European and Gulf primes already engaged on national systems.',
+    avg: 'Average programme US$ 264 mm',
     next: 'The unit becomes the group’s engine' },
 ];
 
@@ -101,17 +104,15 @@ BUS.forEach((b, i) => {
   rect(s, x, 3.77, BARW, 0.105, 'EDEFF4');
   rect(s, x, 3.77, BARW * b.total / BARMAX, 0.105, b.bar);
 
-  txt(s, b.prog, { x, y: 3.98, w: COLW, h: 0.20, valign: 'middle',
-    fontFace: K.F, fontSize: 8, color: INK });
-  txt(s, 'Largest', { x, y: 4.22, w: COLW, h: 0.16, valign: 'middle',
-    fontFace: 'Montserrat Light', fontSize: 6.2, color: GREY_L, charSpacing: 0.6 });
-  txt(s, b.big, { x, y: 4.37, w: COLW, h: 0.20, valign: 'middle',
-    fontFace: K.F, fontSize: 7.8, color: INK });
-  txt(s, b.plan, { x, y: 4.60, w: COLW, h: 0.20, valign: 'middle',
+  txt(s, b.prog, { x, y: 3.96, w: COLW, h: 0.20, valign: 'middle',
+    fontFace: K.F, bold: true, fontSize: 8.4, color: INK });
+  txt(s, b.qual, { x, y: 4.17, w: COLW - 0.08, h: 0.44, valign: 'top',
+    fontFace: K.F, fontSize: 7.6, color: GREY_T, lineSpacingMultiple: 1.12 });
+  txt(s, b.avg, { x, y: 4.62, w: COLW, h: 0.20, valign: 'middle',
     fontFace: K.F, bold: true, fontSize: 8, color: b.accent });
 });
 
-txt(s, 'Identified opportunity is the total contract value of every signed contract and open commercial opportunity in the Company’s commercial review, at face value and unweighted; a further six identified programmes carry no value yet and are excluded. Coverage compares it with cumulative gross revenue in the 2026–32 plan.',
+txt(s, 'Identified opportunity is the total contract value of every signed contract and open commercial opportunity in the Company’s commercial review, at face value and unweighted; a further six identified programmes carry no value yet and are excluded.',
   { x: 0.63, y: 5.10, w: 12.0, h: 0.22, valign: 'middle',
     fontFace: 'Montserrat Light', fontSize: 6.6, color: GREY_L });
 
@@ -157,6 +158,6 @@ GEO.forEach(([n, v, c], i) => {
     { x: lx + 0.15, y: ly, w: 1.82, h: 0.21, valign: 'middle', margin: 0, fontFace: K.F, fontSize: 7.2 });
 });
 
-footer(s, 50, { source: 'Source: Company — commercial review of backlog and pipeline, 5 Aug 2026 (rev. 2); Company financial model, Base case (FX R$ 5.17/US$).' });
+footer(s, 50, { source: 'Source: Company — commercial review of backlog and pipeline, 5 Aug 2026 (rev. 2).' });
 
 p.writeFile({ fileName: 'MacJee_p50_BU_size.pptx' }).then(() => console.log('WROTE MacJee_p50_BU_size.pptx'));
