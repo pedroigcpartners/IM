@@ -12,7 +12,7 @@ const BUS = [
   { name: 'Munitions', legal: 'Mac Jee Indústria de Defesa', dark: '6FA82F', bar: '92D050', tint: 'F1F8E6',
     ident: 1605.3, plan: 1549.7, hero: '1.6', share: '35%', cov: '104%',
     desc: 'Aerial bombs, artillery, rockets and fuzes',
-    f: [['34 programmes · 11 countries'], ['Largest: US$ 250 mm — 155 mm ERFBBB, Bulgaria'], ['Already in serial production']],
+    f: [['30 programmes · 12 countries'], ['Largest: US$ 250 mm — 155 mm ERFBBB, Bulgaria'], ['Already in serial production']],
     next: 'Capacity is already built' },
   { name: 'Energetics', legal: 'Mac Jee Tecnologia', dark: 'C79000', bar: 'FFC000', tint: 'FFF7E3',
     ident: 1137.3, plan: 606.2, hero: '1.1', share: '25%', cov: '188%',
@@ -22,12 +22,12 @@ const BUS = [
   { name: 'Missile', legal: 'TMC — The Missile Company', dark: '4A5261', bar: '9AA3B2', tint: 'F0F2F5',
     ident: 1850.7, plan: 1930.0, hero: '1.9', share: '40%', cov: '96%',
     desc: 'Cruise missiles, air defence and rocket motors',
-    f: [['9 programmes · 5 countries'], ['Largest: US$ 1,000 mm — confidential, Saudi Arabia'], ['European and Gulf primes engaged']],
+    f: [['7 programmes · 6 countries'], ['Largest: US$ 1,000 mm — confidential, Saudi Arabia'], ['European and Gulf primes engaged']],
     next: 'The unit becomes the group’s engine' },
 ];
 const IDENT_T = 4593.3, PLAN_T = 4085.9;
 const SRC = 'Source: Company — commercial review of backlog and pipeline, 5 Aug 2026 (rev. 2); Company financial model, Base case (FX R$ 5.17/US$).';
-const NOTE = 'Identified opportunity is the total contract value of every signed contract and open commercial opportunity in the Company’s commercial review, at face value and unweighted.';
+const NOTE = 'Identified opportunity is the total contract value of every signed contract and open commercial opportunity in the Company’s commercial review, at face value and unweighted; a further six identified programmes carry no value yet and are excluded.';
 
 /* =====================================================================
    FORMATO B — MOSAICO PROPORCIONAL
@@ -37,7 +37,7 @@ const NOTE = 'Identified opportunity is the total contract value of every signed
   const s = p.addSlide(); s.background = { color: 'FFFFFF' };
   chrome(s, { tab: 3,
     title: 'US$ 4.6 bn of identified opportunity by business unit',
-    subtitle: '55 named programmes across 21 countries — every block below is sized by the value it carries' });
+    subtitle: '49 valued programmes across 21 countries — every block below is sized by the value it carries' });
 
   const CX = 0.391, CY = 1.56, CW = 12.551, CH = 3.38;
   chamfer(s, CX, CY, CW, CH, 0.348, 'tr-bl', { fill: { color: 'FFFFFF' }, line: { type: 'none' },
@@ -175,7 +175,7 @@ const NOTE = 'Identified opportunity is the total contract value of every signed
 
   darkField(s, 0, 5.643, 13.333, 1.857);
   const SC2 = [['4.6', 'bn', 'Identified opportunity'], ['4.1', 'bn', 'Revenue in the plan'],
-               ['55', '', 'Named programmes'], ['21', '', 'Countries']];
+               ['49', '', 'Valued programmes'], ['21', '', 'Countries']];
   SC2.forEach(([v, u, l], i) => {
     const x = 0.60 + i * 1.78, y = 5.88, w = 1.62, h = 1.00;
     chamfer(s, x, y, w, h, 0.16, 'tr-bl', { fill: { color: K.STATFL }, line: { color: BLUE_L, width: 1.5 } });

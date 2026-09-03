@@ -18,7 +18,7 @@ const INK = K.INK, GREY_T = '3C4657', GREY_L = '8C93A8', BLUE_L = '95A8FE';
 
 chrome(s, { tab: 3,
   title: 'US$ 4.6 bn of identified opportunity by business unit',
-  subtitle: '55 named programmes across 21 countries — 1.1x the entire 2026–32 revenue plan, already identified commercially' });
+  subtitle: '49 valued programmes across 21 countries — 1.1x the entire 2026–32 revenue plan, already identified commercially' });
 
 /* ===================== card branco (geometria da p49) ===================== */
 const CX = 0.391, CY = 1.56, CW = 12.551, CH = 3.38, CUT = 0.348;
@@ -42,7 +42,7 @@ txt(s, 'identified commercial opportunity', { x: TX + 0.24, y: TY + 1.06, w: TW 
   valign: 'middle', fontFace: K.F, fontSize: 7.8, color: 'C6CBDA' });
 rect(s, TX + 0.24, TY + 1.34, TW - 0.48, 0.010, '3C4E86');
 
-const TM = [['Named programmes', '55'], ['Countries', '21'],
+const TM = [['Valued programmes', '49'], ['Countries', '21'],
             ['Revenue in the 2026–32 plan', 'US$ 4.1 bn'], ['Plan coverage', '1.1x']];
 TM.forEach(([l, v], i) => {
   const y = TY + 1.46 + i * 0.295;
@@ -57,7 +57,7 @@ const BUS = [
   { name: 'Munitions', legal: 'Mac Jee Indústria de Defesa', accent: '6FA82F', bar: '92D050',
     desc: 'Aerial bombs, artillery, rockets, fuzes and launcher vehicles — already in serial production',
     hero: '1.6', total: 1605.3, share: '35%',
-    prog: '34 programmes  ·  11 countries',
+    prog: '30 programmes  ·  12 countries',
     big: 'US$ 250 mm — 155 mm ERFBBB, Bulgaria',
     plan: 'US$ 1.55 bn  ·  104% covered',
     next: 'Capacity is already built' },
@@ -71,7 +71,7 @@ const BUS = [
   { name: 'Missile', legal: 'TMC — The Missile Company', accent: '4A5261', bar: '9AA3B2',
     desc: 'Cruise missiles, air defence, anti-radiation systems and rocket motors for European and Gulf primes',
     hero: '1.9', total: 1850.7, share: '40%',
-    prog: '9 programmes  ·  5 countries',
+    prog: '7 programmes  ·  6 countries',
     big: 'US$ 1,000 mm — confidential, Saudi Arabia',
     plan: 'US$ 1.93 bn  ·  96% covered',
     next: 'The unit becomes the group’s engine' },
@@ -111,7 +111,7 @@ BUS.forEach((b, i) => {
     fontFace: K.F, bold: true, fontSize: 8, color: b.accent });
 });
 
-txt(s, 'Identified opportunity is the total contract value of every signed contract and open commercial opportunity in the Company’s commercial review, at face value and unweighted. Coverage compares it with cumulative gross revenue in the 2026–32 plan.',
+txt(s, 'Identified opportunity is the total contract value of every signed contract and open commercial opportunity in the Company’s commercial review, at face value and unweighted; a further six identified programmes carry no value yet and are excluded. Coverage compares it with cumulative gross revenue in the 2026–32 plan.',
   { x: 0.63, y: 5.10, w: 12.0, h: 0.22, valign: 'middle',
     fontFace: 'Montserrat Light', fontSize: 6.6, color: GREY_L });
 
