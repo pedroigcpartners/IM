@@ -65,7 +65,16 @@ CAP_Y = TITLE_Y + 0.310            # sub-linha de status
 BODY_Y = TITLE_Y + 0.510           # 4,245
 BODY_INSET = 0.205
 BODY_W = CARD_W - 2 * BODY_INSET
-LNSPC = 132000                     # 0,1835" de entrelinha em corpo de 10pt
+# PowerPoint/LibreOffice tratam espaçamento simples como 1,2x o corpo, então a
+# entrelinha renderizada é pt * lnSpc * 1,2 / 72 — e não pt * lnSpc / 72. Fixar
+# 132% dava 0,220" onde o CIM tem 0,1835" (medido nos dois PDFs: 0,220 contra
+# 0,184/0,183/0,183). A porcentagem passa a sair da entrelinha-alvo.
+def lnspc(pt, pitch_in):
+    return int(round(pitch_in * 72.0 / (pt * 1.2) * 100000))
+
+
+BODY_PITCH = 0.1835                # pág. 34 do CIM, corpo de 10pt
+LNSPC = lnspc(10, BODY_PITCH)      # 110%
 
 CARDS = [
     {
@@ -166,9 +175,10 @@ def run(text, sz, face, color, bold=False):
     )
 
 
-def sp_text(sid, name, x, y, w, h, paras, align="l", anchor="t"):
+def sp_text(sid, name, x, y, w, h, paras, align="l", anchor="t", ls=None):
+    ls = LNSPC if ls is None else ls
     body = "".join(
-        f'<a:p><a:pPr algn="{align}"><a:lnSpc><a:spcPct val="{LNSPC}"/></a:lnSpc>'
+        f'<a:p><a:pPr algn="{align}"><a:lnSpc><a:spcPct val="{ls}"/></a:lnSpc>'
         f'<a:spcBef><a:spcPts val="{sb}"/></a:spcBef></a:pPr>{runs}</a:p>'
         for runs, sb in paras
     )
@@ -229,9 +239,9 @@ def build_slide(ars):
     for i, c in enumerate(CARDS):
         cx = CARD_X[i]
         out.append(sp_text(nid(), f"CardTitle{i}", cx, TITLE_Y, CARD_W, 0.30,
-                           [(run(c["title"], 16, "Poppins SemiBold", SLATE), 0)], align="ctr"))
+                           [(run(c["title"], 16, "Poppins SemiBold", SLATE), 0)], align="ctr", ls=100000))
         out.append(sp_text(nid(), f"CardCap{i}", cx, CAP_Y, CARD_W, 0.20,
-                           [(run(c["cap"], 9, "Poppins Medium", SLATE), 0)], align="ctr"))
+                           [(run(c["cap"], 9, "Poppins Medium", SLATE), 0)], align="ctr", ls=100000))
         paras = [(run(c["body"], 10, "Poppins", PLUM), 0)]
         if c.get("note"):
             runs = "".join(
@@ -243,17 +253,17 @@ def build_slide(ars):
 
     # ---- chrome da página --------------------------------------------
     out.append(sp_text(nid(), "Section", 0.800, 0.374, 2.400, 0.190,
-                       [(run("Company overview", 10, "Poppins Light", PLUM), 0)]))
+                       [(run("Company overview", 10, "Poppins Light", PLUM), 0)], ls=100000))
     out.append(sp_text(nid(), "Title", 0.800, 0.756, 12.142, 0.330,
-                       [(run(TITLE, 18, "Poppins Medium", SLATE), 0)]))
+                       [(run(TITLE, 18, "Poppins Medium", SLATE), 0)], ls=100000))
     out.append(sp_text(nid(), "Subtitle", 0.806, 1.183, 11.900, 0.460,
-                       [(run(SUBTITLE, 11, "Poppins Medium", PLUM), 0)]))
+                       [(run(SUBTITLE, 11, "Poppins Medium", PLUM), 0)], ls=lnspc(11, 0.202)))
     out.append(sp_text(nid(), "Source", 0.800, 6.773, 10.144, 0.170,
-                       [(run("Source: Company", 8, "Poppins Light", GREY), 0)]))
+                       [(run("Source: Company", 8, "Poppins Light", GREY), 0)], ls=100000))
     # marcador de rascunho, idêntico ao que o CIM carrega nas páginas novas
     out.append(sp_rect(nid(), "NewTag", 10.604, 0.0, 1.000, 0.559, "92D050"))
     out.append(sp_text(nid(), "NewTagTxt", 10.604, 0.140, 1.000, 0.280,
-                       [(run("New", 12, "Source Serif Pro", PLUM), 0)], align="ctr"))
+                       [(run("New", 12, "Source Serif Pro", PLUM), 0)], align="ctr", ls=100000))
 
     head = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
             '<p:sld xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" '
