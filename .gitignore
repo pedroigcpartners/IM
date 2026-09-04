@@ -6,3 +6,6 @@ refs/**/unpacked/
 scratchpad/
 *.tmp
 .~lock.*
+
+# Project Yellow one-pager: generated intermediates
+yellow/gen/

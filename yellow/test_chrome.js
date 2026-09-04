@@ -1,0 +1,25 @@
+const K = require('./yellow_kit.js');
+(async () => {
+  const p = K.init('chrome test');
+  const s = p.addSlide(); s.background = { color: K.C.white };
+  const hTop = await K.hatch(K.cm(43.06), K.cm(1.25));
+  K.img(s, hTop, 0, 0, K.cm(43.06), K.cm(1.25));
+  K.eyebrow(s, 'MANAGEMENT MEETING');
+  K.tracbelLogo(s);
+  K.txt(s, 'Chrome test — Century Gothic bold title at 24pt on the IM canvas', { x: K.cm(1.58), y: K.cm(3.19), w: K.cm(45.2), h: K.cm(1.2), fontSize: 24, bold: true });
+  K.r1rect(s, K.cm(1.58), K.cm(6), K.cm(14), K.cm(8), K.C.black, { corner: 'tr', radius: 0.35 });
+  const hDark = await K.hatch(K.cm(5), K.cm(8), 'FFFFFF', 'w');
+  K.img(s, hDark, K.cm(10.58), K.cm(6), K.cm(5), K.cm(8));
+  K.txt(s, 'Dark panel · white text 14pt', { x: K.cm(2.2), y: K.cm(6.6), w: K.cm(8), h: K.cm(1), fontSize: 14, color: 'FFFFFF' });
+  K.igcLogo(s, K.cm(2.2), K.cm(11.5), K.cm(1.6), true);
+  K.badge(s, K.cm(17), K.cm(6), K.cm(0.9), 'A');
+  K.card(s, K.cm(17), K.cm(7.5), K.cm(12), K.cm(6));
+  K.txt(s, 'Comments card 12pt body text. Placeholder [TBC].', { x: K.cm(17.5), y: K.cm(8), w: K.cm(11), h: K.cm(1), fontSize: 12 });
+  const ic = await K.icon('FiMapPin', '000000');
+  K.rect(s, K.cm(31), K.cm(6), K.cm(1.4), K.cm(1.4), K.C.grayL);
+  K.img(s, ic, K.cm(31.25), K.cm(6.25), K.cm(0.9), K.cm(0.9));
+  K.rect(s, 0, K.cm(25.0), K.W, K.cm(2.43), K.C.black);
+  K.pageNo(s, 1, { color: 'FFFFFF' });
+  await p.writeFile({ fileName: 'yellow/gen/test_chrome.pptx' });
+  console.log('ok');
+})().catch(e => { console.error(e); process.exit(1); });
