@@ -94,7 +94,7 @@ function eyebrow(s, text, o = {}) {
   const y = o.y == null ? cm(1.77) : o.y, h = cm(1.42), w = o.w || cm(8.31);
   r1rect(s, cm(-0.06), y, w, h, o.fill || C.grayL, { corner: 'br', radius: 0.11 });
   rect(s, cm(-0.06), y, cm(0.86), h, C.yellow);
-  txt(s, text, { x: cm(1.1), y, w: w - cm(1.2), h, fontSize: o.size || 14, color: o.color || C.black, valign: 'middle', charSpacing: 0.6 });
+  txt(s, text, { x: cm(1.1), y, w: w - cm(1.2), h, fontSize: o.size || 14, color: o.color || C.black, valign: 'middle', charSpacing: 0.6, wrap: false });
 }
 function tracbelLogo(s, o = {}) {
   const w = o.w || cm(4.27), h = w * 450 / 2308;

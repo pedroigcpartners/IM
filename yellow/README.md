@@ -5,6 +5,12 @@ Project Yellow Information Memorandum canvas and identity (48.77 × 27.43 cm, Tr
 black, gray `#B1B3B5`, Century Gothic, eyebrow tab with yellow stub, Tracbel logo top-right, hatch texture,
 one-corner-rounded black panel, black footer band).
 
+**Layout.** Left: the invitation, what each site shows and what to send before travelling. Right: the
+programme as a **time grid** — hours on the left rail, one column per day, the task inside the slot, and
+`[    ]` in every hour still free, so the page doubles as the working schedule. A black NIGHT strip closes
+the grid with where they sleep. Bottom: five practical-note tiles. Footer: contacts and the confidentiality
+legend.
+
 ## Files
 
 | File | What |
@@ -22,12 +28,18 @@ then `pdftoppm -png -r 90 …`. LibreOffice here substitutes URW Gothic for Cent
 
 ## Sources of every fact on the page
 
-- **Itinerary, arranged-by, flights LX 092 / LX 93, GRU T3, 05:25 / 18:25** — logistics e-mail thread
-  (Bruno Iervolino → Henrik, 25 Aug 2026; Lars's reply). Reproduced verbatim; open items kept as `[TBC]`.
+- **Itinerary, arranged-by, flights LX 92 / LX 93, GRU T3, 05:25 / 18:25** — logistics e-mail thread
+  (Bruno Iervolino → Henrik, 25 Aug 2026; Lars's reply). Reproduced faithfully; open items kept as `[TBC]`.
+  The thread writes "LX 092" and "LX93"; the page harmonises both to the airline form (LX 92 / LX 93).
+  Only the sequence the thread pins down is placed in the grid (morning flights, evening flights, the
+  Contagem car). Every other hour is an empty slot, never an invented meeting.
 - **Company facts** (Sumaré = first LEAN / TPS unit, Contagem HQ, IM page ranges) — Project Yellow IM (16 Jul 2026), slides 13, 16, 19, 26.
-- **Names/roles** — public sources: Luiz Gustavo Rocha (de Magalhães Pereira) is Chairman of the Board and President of
-  Holding Tracbel since Jan 2024 (Group CEO is Gidalto Santos). Lars Corneliusson (Executive Chairman) and Henrik Carlborg
-  (President & CEO) are the only Lars/Henrik in Ferronordic's board and management — **confirm they are the visitors**.
+- **Names** — the thread gives first names only, so the page uses first names only and signs off as
+  "The Tracbel management team" and "Bruno Iervolino · IGC Partners". Public sources indicate the likely
+  identities (Luiz Gustavo Rocha, Chairman of the Board and President of Holding Tracbel since Jan 2024;
+  Group CEO is Gidalto Santos; Lars Corneliusson, Executive Chairman, and Henrik Carlborg, President & CEO,
+  are the only Lars/Henrik in Ferronordic's management) — the page carries Luiz Gustavo's title as
+  `[title — TBC]` rather than asserting it.
 - **Terminal BTG Pactual** — private terminal ~250 m from GRU T3; planeside pick-up, private immigration/customs, baggage
   delivered, exit to the car. Operating slot at 05:25 on a Monday **not verified** — confirm with the booking.
 - **Practical notes** — visa-free 90 days for Swedish/Swiss passports; Brazil UTC−3, no DST (5 h behind Zürich in September);
@@ -47,3 +59,8 @@ then `pdftoppm -png -r 90 …`. LibreOffice here substitutes URW Gothic for Cent
 4. **Henrik's return flight and Curitiba nights** — still open in the thread.
 5. **On-site narrative** — the IM disclaimer says employees may not know about the process; agree with Tracbel how the
    visitors are introduced on the shop floor before Tue 22/09.
+6. **Site PPE** — the page says PPE and a safety briefing are `[to be provided by Tracbel — TBC]`. Confirm what the
+   sites issue to visitors (and whether safety boots are provided, in which case ask for shoe sizes).
+7. **Language of the sessions** — shown as "expected to be in English [to be confirmed]". Confirm with Tracbel.
+8. **Empty slots** — the grid deliberately leaves most hours as `[    ]`. Fill them once the agendas for Sumaré,
+   Contagem, the Thursday morning and Curitiba are agreed, and add the meal and session times.
